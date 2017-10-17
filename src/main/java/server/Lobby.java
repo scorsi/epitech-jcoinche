@@ -4,6 +4,7 @@ import proto.Message.MessageWrapper;
 import proto.Message.MessageChat;
 
 import io.netty.channel.Channel;
+import server.game.Player;
 
 import java.sql.Timestamp;
 import java.util.HashMap;
@@ -39,6 +40,10 @@ public class Lobby {
     }
 
     public void broadcast(String msg, Channel incomingChannel) {
+        String name = "Server";
+        if (incomingChannel != null)
+            name = this.players.get(incomingChannel).getName();
+
         for (Channel channel : this.players.keySet()) {
             if (incomingChannel == null || channel.remoteAddress() != incomingChannel.remoteAddress()) {
                 channel.writeAndFlush(
@@ -46,13 +51,17 @@ public class Lobby {
                                 .setTimestamp(new Timestamp(System.currentTimeMillis()).getTime())
                                 .setType(MessageWrapper.MessageType.CHAT)
                                 .setChat(MessageChat.newBuilder()
-                                        .setText(msg)
+                                        .setText("[" + name + "] " + msg)
                                         .build())
                                 .setCode(0)
                                 .build()
                 );
             }
         }
+    }
+
+    public Player getPlayer(Channel channel) {
+        return this.players.get(channel);
     }
 
     public LobbyManager getLobbyManager() {

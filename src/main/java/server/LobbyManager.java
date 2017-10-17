@@ -6,6 +6,7 @@ import proto.Command.GlobalCmd;
 import proto.Command.LobbyCmd;
 import proto.Message.MessageWrapper;
 import proto.Message.MessageChat;
+import server.game.Player;
 
 import java.sql.Timestamp;
 import java.util.ArrayList;
@@ -36,7 +37,7 @@ public class LobbyManager {
 
     private void handleChat(Channel channel, MessageChat chat) {
         if (this.waitingPlayers.containsKey(channel)) {
-            this.sendMsg(channel, "You can't chat when you're not in a lobby. Please wait.");
+            this.sendMsg(channel, "[Server] You can't chat when you're not in a lobby. Please wait.");
         } else {
             for (Lobby lobby : lobbies) {
                 if (lobby.has(channel)) {
@@ -67,7 +68,7 @@ public class LobbyManager {
 
         this.waitingPlayers.put(channel, player);
 
-        this.sendMsg(channel, "Welcome to the jCoinche server!\nYour name is " + player.getName() + ". You can change it by typing \"/username {name}\".");
+        this.sendMsg(channel, "[Server] Welcome to the jCoinche server!\nYour name is " + player.getName() + ". You can change it by typing \"/username {name}\".");
 
         this.checkForAvailableLobby();
     }
@@ -76,14 +77,7 @@ public class LobbyManager {
         if (this.waitingPlayers.containsKey(channel))
             this.waitingPlayers.remove(channel);
         else {
-            Lobby lobbyToShutdown = null;
-
-            for (Lobby lobby : lobbies) {
-                if (lobby.has(channel)) {
-                    lobbyToShutdown = lobby;
-                    break;
-                }
-            }
+            Lobby lobbyToShutdown = this.getLobbyByChannel(channel);
 
             if (lobbyToShutdown == null)
                 return;
@@ -91,6 +85,19 @@ public class LobbyManager {
             lobbyToShutdown.shutdown(channel);
             lobbies.remove(lobbyToShutdown);
         }
+    }
+
+    private Lobby getLobbyByChannel(Channel channel) {
+        Lobby lobbyToReturn = null;
+
+        for (Lobby lobby : lobbies) {
+            if (lobby.has(channel)) {
+                lobbyToReturn = lobby;
+                break;
+            }
+        }
+
+        return lobbyToReturn;
     }
 
     private void sendMsg(Channel channel, String msg) {
@@ -107,8 +114,17 @@ public class LobbyManager {
     }
 
     private void changePlayer(Channel channel, String name) {
-        this.waitingPlayers.get(channel).setName(name);
-        this.sendMsg(channel, "Your username has been changed to " + name + ".");
+        if (this.waitingPlayers.containsKey(channel)) {
+            this.waitingPlayers.get(channel).setName(name);
+            this.sendMsg(channel, "[Server] Your username has been changed to " + name + ".");
+        } else {
+            Lobby lobby = this.getLobbyByChannel(channel);
+            if (lobby == null) return;
+            Player player = lobby.getPlayer(channel);
+            if (player == null) return;
+            lobby.broadcast(player.getName() + " has changed his username to " + name + ".", null);
+            player.setName(name);
+        }
     }
 
     private void checkForAvailableLobby() {
