@@ -1,11 +1,13 @@
-package server;
+package server.game;
 
 public class Player {
 
     private String name;
+    private Deck deck;
 
     public Player(String name) {
         this.name = name;
+        this.deck = null;
     }
 
     public String getName() {
@@ -17,4 +19,12 @@ public class Player {
         return this;
     }
 
+    public Deck getDeck() {
+        return deck;
+    }
+
+    public Player setDeck(Deck deck) {
+        this.deck = deck;
+        return this;
+    }
 }
