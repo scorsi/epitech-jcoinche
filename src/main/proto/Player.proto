@@ -1,0 +1,19 @@
+syntax = "proto2";
+
+package proto;
+
+option java_package = "proto";
+option java_outer_classname = "Player";
+
+
+message PlayerConnection {
+    required string name = 1;
+
+    enum TEAM {
+        BLUE = 0;
+        RED = 1;
+        SPECTATOR = 2;
+    }
+
+    required TEAM team = 2;
+}
