@@ -1,0 +1,67 @@
+
+buildscript {
+    repositories {
+        mavenCentral()
+    }
+    dependencies {
+        classpath 'com.google.protobuf:protobuf-gradle-plugin:0.8.3'
+    }
+}
+
+
+
+apply plugin: 'application'
+apply plugin: 'com.google.protobuf'
+
+mainClassName = "net.server.Server"
+sourceCompatibility = 7
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    compile (
+            'com.google.protobuf:protobuf-java:3.0.0',
+            'io.netty:netty-all:4.1.16.Final'
+    )
+
+    testCompile group: 'junit', name: 'junit', version: '4.12'
+}
+
+sourceSets {
+    main {
+        proto {
+            srcDir "src/main/proto"
+        }
+        java {
+            srcDir "src/main/java"
+        }
+    }
+}
+
+protobuf {
+    protoc {
+        artifact = 'com.google.protobuf:protoc:3.0.0-alpha-3'
+    }
+
+    generateProtoTasks.generatedFilesBaseDir = 'src'
+
+    generateProtoTasks {
+        all().each { task ->
+        }
+        ofSourceSet('main')
+
+    }
+}
+
+jar {
+    baseName = "java-test"
+    version = "0.0.1"
+    manifest {
+        attributes (
+                "Class-Path" : configurations.compile.collect { it.getName() }.join(' '),
+                "Main-Class" : "net.server.Server"
+        )
+    }
+}
