@@ -548,17 +548,30 @@ public final class Message {
     proto.Message.MessageChatOrBuilder getChatOrBuilder();
 
     /**
-     * <code>optional .proto.PlayerConnection player = 5;</code>
+     * <code>optional .proto.LobbyCmd lobbyCmd = 5;</code>
      */
-    boolean hasPlayer();
+    boolean hasLobbyCmd();
     /**
-     * <code>optional .proto.PlayerConnection player = 5;</code>
+     * <code>optional .proto.LobbyCmd lobbyCmd = 5;</code>
      */
-    proto.Player.PlayerConnection getPlayer();
+    proto.Command.LobbyCmd getLobbyCmd();
     /**
-     * <code>optional .proto.PlayerConnection player = 5;</code>
+     * <code>optional .proto.LobbyCmd lobbyCmd = 5;</code>
      */
-    proto.Player.PlayerConnectionOrBuilder getPlayerOrBuilder();
+    proto.Command.LobbyCmdOrBuilder getLobbyCmdOrBuilder();
+
+    /**
+     * <code>optional .proto.GlobalCmd globalCmd = 6;</code>
+     */
+    boolean hasGlobalCmd();
+    /**
+     * <code>optional .proto.GlobalCmd globalCmd = 6;</code>
+     */
+    proto.Command.GlobalCmd getGlobalCmd();
+    /**
+     * <code>optional .proto.GlobalCmd globalCmd = 6;</code>
+     */
+    proto.Command.GlobalCmdOrBuilder getGlobalCmdOrBuilder();
   }
   /**
    * Protobuf type {@code proto.MessageWrapper}
@@ -639,16 +652,29 @@ public final class Message {
               break;
             }
             case 42: {
-              proto.Player.PlayerConnection.Builder subBuilder = null;
+              proto.Command.LobbyCmd.Builder subBuilder = null;
               if (bodyCase_ == 5) {
-                subBuilder = ((proto.Player.PlayerConnection) body_).toBuilder();
+                subBuilder = ((proto.Command.LobbyCmd) body_).toBuilder();
               }
-              body_ = input.readMessage(proto.Player.PlayerConnection.PARSER, extensionRegistry);
+              body_ = input.readMessage(proto.Command.LobbyCmd.PARSER, extensionRegistry);
               if (subBuilder != null) {
-                subBuilder.mergeFrom((proto.Player.PlayerConnection) body_);
+                subBuilder.mergeFrom((proto.Command.LobbyCmd) body_);
                 body_ = subBuilder.buildPartial();
               }
               bodyCase_ = 5;
+              break;
+            }
+            case 50: {
+              proto.Command.GlobalCmd.Builder subBuilder = null;
+              if (bodyCase_ == 6) {
+                subBuilder = ((proto.Command.GlobalCmd) body_).toBuilder();
+              }
+              body_ = input.readMessage(proto.Command.GlobalCmd.PARSER, extensionRegistry);
+              if (subBuilder != null) {
+                subBuilder.mergeFrom((proto.Command.GlobalCmd) body_);
+                body_ = subBuilder.buildPartial();
+              }
+              bodyCase_ = 6;
               break;
             }
           }
@@ -686,9 +712,13 @@ public final class Message {
        */
       CHAT(0, 1),
       /**
-       * <code>PLAYER_CONNECTION = 2;</code>
+       * <code>LOBBY_CMD = 2;</code>
        */
-      PLAYER_CONNECTION(1, 2),
+      LOBBY_CMD(1, 2),
+      /**
+       * <code>GLOBAL_CMD = 3;</code>
+       */
+      GLOBAL_CMD(2, 3),
       ;
 
       /**
@@ -696,9 +726,13 @@ public final class Message {
        */
       public static final int CHAT_VALUE = 1;
       /**
-       * <code>PLAYER_CONNECTION = 2;</code>
+       * <code>LOBBY_CMD = 2;</code>
        */
-      public static final int PLAYER_CONNECTION_VALUE = 2;
+      public static final int LOBBY_CMD_VALUE = 2;
+      /**
+       * <code>GLOBAL_CMD = 3;</code>
+       */
+      public static final int GLOBAL_CMD_VALUE = 3;
 
 
       public final int getNumber() {
@@ -708,7 +742,8 @@ public final class Message {
       public static MessageType valueOf(int value) {
         switch (value) {
           case 1: return CHAT;
-          case 2: return PLAYER_CONNECTION;
+          case 2: return LOBBY_CMD;
+          case 3: return GLOBAL_CMD;
           default: return null;
         }
       }
@@ -766,7 +801,8 @@ public final class Message {
     public enum BodyCase
         implements com.google.protobuf.Internal.EnumLite {
       CHAT(4),
-      PLAYER(5),
+      LOBBYCMD(5),
+      GLOBALCMD(6),
       BODY_NOT_SET(0);
       private int value = 0;
       private BodyCase(int value) {
@@ -775,7 +811,8 @@ public final class Message {
       public static BodyCase valueOf(int value) {
         switch (value) {
           case 4: return CHAT;
-          case 5: return PLAYER;
+          case 5: return LOBBYCMD;
+          case 6: return GLOBALCMD;
           case 0: return BODY_NOT_SET;
           default: throw new java.lang.IllegalArgumentException(
             "Value is undefined for this oneof enum.");
@@ -880,30 +917,56 @@ public final class Message {
       return proto.Message.MessageChat.getDefaultInstance();
     }
 
-    public static final int PLAYER_FIELD_NUMBER = 5;
+    public static final int LOBBYCMD_FIELD_NUMBER = 5;
     /**
-     * <code>optional .proto.PlayerConnection player = 5;</code>
+     * <code>optional .proto.LobbyCmd lobbyCmd = 5;</code>
      */
-    public boolean hasPlayer() {
+    public boolean hasLobbyCmd() {
       return bodyCase_ == 5;
     }
     /**
-     * <code>optional .proto.PlayerConnection player = 5;</code>
+     * <code>optional .proto.LobbyCmd lobbyCmd = 5;</code>
      */
-    public proto.Player.PlayerConnection getPlayer() {
+    public proto.Command.LobbyCmd getLobbyCmd() {
       if (bodyCase_ == 5) {
-         return (proto.Player.PlayerConnection) body_;
+         return (proto.Command.LobbyCmd) body_;
       }
-      return proto.Player.PlayerConnection.getDefaultInstance();
+      return proto.Command.LobbyCmd.getDefaultInstance();
     }
     /**
-     * <code>optional .proto.PlayerConnection player = 5;</code>
+     * <code>optional .proto.LobbyCmd lobbyCmd = 5;</code>
      */
-    public proto.Player.PlayerConnectionOrBuilder getPlayerOrBuilder() {
+    public proto.Command.LobbyCmdOrBuilder getLobbyCmdOrBuilder() {
       if (bodyCase_ == 5) {
-         return (proto.Player.PlayerConnection) body_;
+         return (proto.Command.LobbyCmd) body_;
       }
-      return proto.Player.PlayerConnection.getDefaultInstance();
+      return proto.Command.LobbyCmd.getDefaultInstance();
+    }
+
+    public static final int GLOBALCMD_FIELD_NUMBER = 6;
+    /**
+     * <code>optional .proto.GlobalCmd globalCmd = 6;</code>
+     */
+    public boolean hasGlobalCmd() {
+      return bodyCase_ == 6;
+    }
+    /**
+     * <code>optional .proto.GlobalCmd globalCmd = 6;</code>
+     */
+    public proto.Command.GlobalCmd getGlobalCmd() {
+      if (bodyCase_ == 6) {
+         return (proto.Command.GlobalCmd) body_;
+      }
+      return proto.Command.GlobalCmd.getDefaultInstance();
+    }
+    /**
+     * <code>optional .proto.GlobalCmd globalCmd = 6;</code>
+     */
+    public proto.Command.GlobalCmdOrBuilder getGlobalCmdOrBuilder() {
+      if (bodyCase_ == 6) {
+         return (proto.Command.GlobalCmd) body_;
+      }
+      return proto.Command.GlobalCmd.getDefaultInstance();
     }
 
     private byte memoizedIsInitialized = -1;
@@ -930,8 +993,14 @@ public final class Message {
           return false;
         }
       }
-      if (hasPlayer()) {
-        if (!getPlayer().isInitialized()) {
+      if (hasLobbyCmd()) {
+        if (!getLobbyCmd().isInitialized()) {
+          memoizedIsInitialized = 0;
+          return false;
+        }
+      }
+      if (hasGlobalCmd()) {
+        if (!getGlobalCmd().isInitialized()) {
           memoizedIsInitialized = 0;
           return false;
         }
@@ -955,7 +1024,10 @@ public final class Message {
         output.writeMessage(4, (proto.Message.MessageChat) body_);
       }
       if (bodyCase_ == 5) {
-        output.writeMessage(5, (proto.Player.PlayerConnection) body_);
+        output.writeMessage(5, (proto.Command.LobbyCmd) body_);
+      }
+      if (bodyCase_ == 6) {
+        output.writeMessage(6, (proto.Command.GlobalCmd) body_);
       }
       unknownFields.writeTo(output);
     }
@@ -984,7 +1056,11 @@ public final class Message {
       }
       if (bodyCase_ == 5) {
         size += com.google.protobuf.CodedOutputStream
-          .computeMessageSize(5, (proto.Player.PlayerConnection) body_);
+          .computeMessageSize(5, (proto.Command.LobbyCmd) body_);
+      }
+      if (bodyCase_ == 6) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeMessageSize(6, (proto.Command.GlobalCmd) body_);
       }
       size += unknownFields.getSerializedSize();
       memoizedSerializedSize = size;
@@ -1150,10 +1226,17 @@ public final class Message {
           }
         }
         if (bodyCase_ == 5) {
-          if (playerBuilder_ == null) {
+          if (lobbyCmdBuilder_ == null) {
             result.body_ = body_;
           } else {
-            result.body_ = playerBuilder_.build();
+            result.body_ = lobbyCmdBuilder_.build();
+          }
+        }
+        if (bodyCase_ == 6) {
+          if (globalCmdBuilder_ == null) {
+            result.body_ = body_;
+          } else {
+            result.body_ = globalCmdBuilder_.build();
           }
         }
         result.bitField0_ = to_bitField0_;
@@ -1187,8 +1270,12 @@ public final class Message {
             mergeChat(other.getChat());
             break;
           }
-          case PLAYER: {
-            mergePlayer(other.getPlayer());
+          case LOBBYCMD: {
+            mergeLobbyCmd(other.getLobbyCmd());
+            break;
+          }
+          case GLOBALCMD: {
+            mergeGlobalCmd(other.getGlobalCmd());
             break;
           }
           case BODY_NOT_SET: {
@@ -1215,8 +1302,13 @@ public final class Message {
             return false;
           }
         }
-        if (hasPlayer()) {
-          if (!getPlayer().isInitialized()) {
+        if (hasLobbyCmd()) {
+          if (!getLobbyCmd().isInitialized()) {
+            return false;
+          }
+        }
+        if (hasGlobalCmd()) {
+          if (!getGlobalCmd().isInitialized()) {
             return false;
           }
         }
@@ -1526,67 +1618,67 @@ public final class Message {
       }
 
       private com.google.protobuf.SingleFieldBuilder<
-          proto.Player.PlayerConnection, proto.Player.PlayerConnection.Builder, proto.Player.PlayerConnectionOrBuilder> playerBuilder_;
+          proto.Command.LobbyCmd, proto.Command.LobbyCmd.Builder, proto.Command.LobbyCmdOrBuilder> lobbyCmdBuilder_;
       /**
-       * <code>optional .proto.PlayerConnection player = 5;</code>
+       * <code>optional .proto.LobbyCmd lobbyCmd = 5;</code>
        */
-      public boolean hasPlayer() {
+      public boolean hasLobbyCmd() {
         return bodyCase_ == 5;
       }
       /**
-       * <code>optional .proto.PlayerConnection player = 5;</code>
+       * <code>optional .proto.LobbyCmd lobbyCmd = 5;</code>
        */
-      public proto.Player.PlayerConnection getPlayer() {
-        if (playerBuilder_ == null) {
+      public proto.Command.LobbyCmd getLobbyCmd() {
+        if (lobbyCmdBuilder_ == null) {
           if (bodyCase_ == 5) {
-            return (proto.Player.PlayerConnection) body_;
+            return (proto.Command.LobbyCmd) body_;
           }
-          return proto.Player.PlayerConnection.getDefaultInstance();
+          return proto.Command.LobbyCmd.getDefaultInstance();
         } else {
           if (bodyCase_ == 5) {
-            return playerBuilder_.getMessage();
+            return lobbyCmdBuilder_.getMessage();
           }
-          return proto.Player.PlayerConnection.getDefaultInstance();
+          return proto.Command.LobbyCmd.getDefaultInstance();
         }
       }
       /**
-       * <code>optional .proto.PlayerConnection player = 5;</code>
+       * <code>optional .proto.LobbyCmd lobbyCmd = 5;</code>
        */
-      public Builder setPlayer(proto.Player.PlayerConnection value) {
-        if (playerBuilder_ == null) {
+      public Builder setLobbyCmd(proto.Command.LobbyCmd value) {
+        if (lobbyCmdBuilder_ == null) {
           if (value == null) {
             throw new NullPointerException();
           }
           body_ = value;
           onChanged();
         } else {
-          playerBuilder_.setMessage(value);
+          lobbyCmdBuilder_.setMessage(value);
         }
         bodyCase_ = 5;
         return this;
       }
       /**
-       * <code>optional .proto.PlayerConnection player = 5;</code>
+       * <code>optional .proto.LobbyCmd lobbyCmd = 5;</code>
        */
-      public Builder setPlayer(
-          proto.Player.PlayerConnection.Builder builderForValue) {
-        if (playerBuilder_ == null) {
+      public Builder setLobbyCmd(
+          proto.Command.LobbyCmd.Builder builderForValue) {
+        if (lobbyCmdBuilder_ == null) {
           body_ = builderForValue.build();
           onChanged();
         } else {
-          playerBuilder_.setMessage(builderForValue.build());
+          lobbyCmdBuilder_.setMessage(builderForValue.build());
         }
         bodyCase_ = 5;
         return this;
       }
       /**
-       * <code>optional .proto.PlayerConnection player = 5;</code>
+       * <code>optional .proto.LobbyCmd lobbyCmd = 5;</code>
        */
-      public Builder mergePlayer(proto.Player.PlayerConnection value) {
-        if (playerBuilder_ == null) {
+      public Builder mergeLobbyCmd(proto.Command.LobbyCmd value) {
+        if (lobbyCmdBuilder_ == null) {
           if (bodyCase_ == 5 &&
-              body_ != proto.Player.PlayerConnection.getDefaultInstance()) {
-            body_ = proto.Player.PlayerConnection.newBuilder((proto.Player.PlayerConnection) body_)
+              body_ != proto.Command.LobbyCmd.getDefaultInstance()) {
+            body_ = proto.Command.LobbyCmd.newBuilder((proto.Command.LobbyCmd) body_)
                 .mergeFrom(value).buildPartial();
           } else {
             body_ = value;
@@ -1594,18 +1686,18 @@ public final class Message {
           onChanged();
         } else {
           if (bodyCase_ == 5) {
-            playerBuilder_.mergeFrom(value);
+            lobbyCmdBuilder_.mergeFrom(value);
           }
-          playerBuilder_.setMessage(value);
+          lobbyCmdBuilder_.setMessage(value);
         }
         bodyCase_ = 5;
         return this;
       }
       /**
-       * <code>optional .proto.PlayerConnection player = 5;</code>
+       * <code>optional .proto.LobbyCmd lobbyCmd = 5;</code>
        */
-      public Builder clearPlayer() {
-        if (playerBuilder_ == null) {
+      public Builder clearLobbyCmd() {
+        if (lobbyCmdBuilder_ == null) {
           if (bodyCase_ == 5) {
             bodyCase_ = 0;
             body_ = null;
@@ -1616,49 +1708,185 @@ public final class Message {
             bodyCase_ = 0;
             body_ = null;
           }
-          playerBuilder_.clear();
+          lobbyCmdBuilder_.clear();
         }
         return this;
       }
       /**
-       * <code>optional .proto.PlayerConnection player = 5;</code>
+       * <code>optional .proto.LobbyCmd lobbyCmd = 5;</code>
        */
-      public proto.Player.PlayerConnection.Builder getPlayerBuilder() {
-        return getPlayerFieldBuilder().getBuilder();
+      public proto.Command.LobbyCmd.Builder getLobbyCmdBuilder() {
+        return getLobbyCmdFieldBuilder().getBuilder();
       }
       /**
-       * <code>optional .proto.PlayerConnection player = 5;</code>
+       * <code>optional .proto.LobbyCmd lobbyCmd = 5;</code>
        */
-      public proto.Player.PlayerConnectionOrBuilder getPlayerOrBuilder() {
-        if ((bodyCase_ == 5) && (playerBuilder_ != null)) {
-          return playerBuilder_.getMessageOrBuilder();
+      public proto.Command.LobbyCmdOrBuilder getLobbyCmdOrBuilder() {
+        if ((bodyCase_ == 5) && (lobbyCmdBuilder_ != null)) {
+          return lobbyCmdBuilder_.getMessageOrBuilder();
         } else {
           if (bodyCase_ == 5) {
-            return (proto.Player.PlayerConnection) body_;
+            return (proto.Command.LobbyCmd) body_;
           }
-          return proto.Player.PlayerConnection.getDefaultInstance();
+          return proto.Command.LobbyCmd.getDefaultInstance();
         }
       }
       /**
-       * <code>optional .proto.PlayerConnection player = 5;</code>
+       * <code>optional .proto.LobbyCmd lobbyCmd = 5;</code>
        */
       private com.google.protobuf.SingleFieldBuilder<
-          proto.Player.PlayerConnection, proto.Player.PlayerConnection.Builder, proto.Player.PlayerConnectionOrBuilder> 
-          getPlayerFieldBuilder() {
-        if (playerBuilder_ == null) {
+          proto.Command.LobbyCmd, proto.Command.LobbyCmd.Builder, proto.Command.LobbyCmdOrBuilder> 
+          getLobbyCmdFieldBuilder() {
+        if (lobbyCmdBuilder_ == null) {
           if (!(bodyCase_ == 5)) {
-            body_ = proto.Player.PlayerConnection.getDefaultInstance();
+            body_ = proto.Command.LobbyCmd.getDefaultInstance();
           }
-          playerBuilder_ = new com.google.protobuf.SingleFieldBuilder<
-              proto.Player.PlayerConnection, proto.Player.PlayerConnection.Builder, proto.Player.PlayerConnectionOrBuilder>(
-                  (proto.Player.PlayerConnection) body_,
+          lobbyCmdBuilder_ = new com.google.protobuf.SingleFieldBuilder<
+              proto.Command.LobbyCmd, proto.Command.LobbyCmd.Builder, proto.Command.LobbyCmdOrBuilder>(
+                  (proto.Command.LobbyCmd) body_,
                   getParentForChildren(),
                   isClean());
           body_ = null;
         }
         bodyCase_ = 5;
         onChanged();;
-        return playerBuilder_;
+        return lobbyCmdBuilder_;
+      }
+
+      private com.google.protobuf.SingleFieldBuilder<
+          proto.Command.GlobalCmd, proto.Command.GlobalCmd.Builder, proto.Command.GlobalCmdOrBuilder> globalCmdBuilder_;
+      /**
+       * <code>optional .proto.GlobalCmd globalCmd = 6;</code>
+       */
+      public boolean hasGlobalCmd() {
+        return bodyCase_ == 6;
+      }
+      /**
+       * <code>optional .proto.GlobalCmd globalCmd = 6;</code>
+       */
+      public proto.Command.GlobalCmd getGlobalCmd() {
+        if (globalCmdBuilder_ == null) {
+          if (bodyCase_ == 6) {
+            return (proto.Command.GlobalCmd) body_;
+          }
+          return proto.Command.GlobalCmd.getDefaultInstance();
+        } else {
+          if (bodyCase_ == 6) {
+            return globalCmdBuilder_.getMessage();
+          }
+          return proto.Command.GlobalCmd.getDefaultInstance();
+        }
+      }
+      /**
+       * <code>optional .proto.GlobalCmd globalCmd = 6;</code>
+       */
+      public Builder setGlobalCmd(proto.Command.GlobalCmd value) {
+        if (globalCmdBuilder_ == null) {
+          if (value == null) {
+            throw new NullPointerException();
+          }
+          body_ = value;
+          onChanged();
+        } else {
+          globalCmdBuilder_.setMessage(value);
+        }
+        bodyCase_ = 6;
+        return this;
+      }
+      /**
+       * <code>optional .proto.GlobalCmd globalCmd = 6;</code>
+       */
+      public Builder setGlobalCmd(
+          proto.Command.GlobalCmd.Builder builderForValue) {
+        if (globalCmdBuilder_ == null) {
+          body_ = builderForValue.build();
+          onChanged();
+        } else {
+          globalCmdBuilder_.setMessage(builderForValue.build());
+        }
+        bodyCase_ = 6;
+        return this;
+      }
+      /**
+       * <code>optional .proto.GlobalCmd globalCmd = 6;</code>
+       */
+      public Builder mergeGlobalCmd(proto.Command.GlobalCmd value) {
+        if (globalCmdBuilder_ == null) {
+          if (bodyCase_ == 6 &&
+              body_ != proto.Command.GlobalCmd.getDefaultInstance()) {
+            body_ = proto.Command.GlobalCmd.newBuilder((proto.Command.GlobalCmd) body_)
+                .mergeFrom(value).buildPartial();
+          } else {
+            body_ = value;
+          }
+          onChanged();
+        } else {
+          if (bodyCase_ == 6) {
+            globalCmdBuilder_.mergeFrom(value);
+          }
+          globalCmdBuilder_.setMessage(value);
+        }
+        bodyCase_ = 6;
+        return this;
+      }
+      /**
+       * <code>optional .proto.GlobalCmd globalCmd = 6;</code>
+       */
+      public Builder clearGlobalCmd() {
+        if (globalCmdBuilder_ == null) {
+          if (bodyCase_ == 6) {
+            bodyCase_ = 0;
+            body_ = null;
+            onChanged();
+          }
+        } else {
+          if (bodyCase_ == 6) {
+            bodyCase_ = 0;
+            body_ = null;
+          }
+          globalCmdBuilder_.clear();
+        }
+        return this;
+      }
+      /**
+       * <code>optional .proto.GlobalCmd globalCmd = 6;</code>
+       */
+      public proto.Command.GlobalCmd.Builder getGlobalCmdBuilder() {
+        return getGlobalCmdFieldBuilder().getBuilder();
+      }
+      /**
+       * <code>optional .proto.GlobalCmd globalCmd = 6;</code>
+       */
+      public proto.Command.GlobalCmdOrBuilder getGlobalCmdOrBuilder() {
+        if ((bodyCase_ == 6) && (globalCmdBuilder_ != null)) {
+          return globalCmdBuilder_.getMessageOrBuilder();
+        } else {
+          if (bodyCase_ == 6) {
+            return (proto.Command.GlobalCmd) body_;
+          }
+          return proto.Command.GlobalCmd.getDefaultInstance();
+        }
+      }
+      /**
+       * <code>optional .proto.GlobalCmd globalCmd = 6;</code>
+       */
+      private com.google.protobuf.SingleFieldBuilder<
+          proto.Command.GlobalCmd, proto.Command.GlobalCmd.Builder, proto.Command.GlobalCmdOrBuilder> 
+          getGlobalCmdFieldBuilder() {
+        if (globalCmdBuilder_ == null) {
+          if (!(bodyCase_ == 6)) {
+            body_ = proto.Command.GlobalCmd.getDefaultInstance();
+          }
+          globalCmdBuilder_ = new com.google.protobuf.SingleFieldBuilder<
+              proto.Command.GlobalCmd, proto.Command.GlobalCmd.Builder, proto.Command.GlobalCmdOrBuilder>(
+                  (proto.Command.GlobalCmd) body_,
+                  getParentForChildren(),
+                  isClean());
+          body_ = null;
+        }
+        bodyCase_ = 6;
+        onChanged();;
+        return globalCmdBuilder_;
       }
 
       // @@protoc_insertion_point(builder_scope:proto.MessageWrapper)
@@ -1723,14 +1951,16 @@ public final class Message {
       descriptor;
   static {
     java.lang.String[] descriptorData = {
-      "\n\rMessage.proto\022\005proto\032\014Player.proto\"\033\n\013" +
-      "MessageChat\022\014\n\004text\030\001 \002(\t\"\351\001\n\016MessageWra" +
-      "pper\022/\n\004type\030\001 \002(\0162!.proto.MessageWrappe" +
-      "r.MessageType\022\014\n\004code\030\002 \002(\005\022\021\n\ttimestamp" +
-      "\030\003 \002(\003\022\"\n\004chat\030\004 \001(\0132\022.proto.MessageChat" +
-      "H\000\022)\n\006player\030\005 \001(\0132\027.proto.PlayerConnect" +
-      "ionH\000\".\n\013MessageType\022\010\n\004CHAT\020\001\022\025\n\021PLAYER" +
-      "_CONNECTION\020\002B\006\n\004bodyB\020\n\005protoB\007Message"
+      "\n\rMessage.proto\022\005proto\032\rCommand.proto\"\033\n" +
+      "\013MessageChat\022\014\n\004text\030\001 \002(\t\"\222\002\n\016MessageWr" +
+      "apper\022/\n\004type\030\001 \002(\0162!.proto.MessageWrapp" +
+      "er.MessageType\022\014\n\004code\030\002 \002(\005\022\021\n\ttimestam" +
+      "p\030\003 \002(\003\022\"\n\004chat\030\004 \001(\0132\022.proto.MessageCha" +
+      "tH\000\022#\n\010lobbyCmd\030\005 \001(\0132\017.proto.LobbyCmdH\000" +
+      "\022%\n\tglobalCmd\030\006 \001(\0132\020.proto.GlobalCmdH\000\"" +
+      "6\n\013MessageType\022\010\n\004CHAT\020\001\022\r\n\tLOBBY_CMD\020\002\022" +
+      "\016\n\nGLOBAL_CMD\020\003B\006\n\004bodyB\020\n\005protoB\007Messag" +
+      "e"
     };
     com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner assigner =
         new com.google.protobuf.Descriptors.FileDescriptor.    InternalDescriptorAssigner() {
@@ -1743,7 +1973,7 @@ public final class Message {
     com.google.protobuf.Descriptors.FileDescriptor
       .internalBuildGeneratedFileFrom(descriptorData,
         new com.google.protobuf.Descriptors.FileDescriptor[] {
-          proto.Player.getDescriptor(),
+          proto.Command.getDescriptor(),
         }, assigner);
     internal_static_proto_MessageChat_descriptor =
       getDescriptor().getMessageTypes().get(0);
@@ -1756,8 +1986,8 @@ public final class Message {
     internal_static_proto_MessageWrapper_fieldAccessorTable = new
       com.google.protobuf.GeneratedMessage.FieldAccessorTable(
         internal_static_proto_MessageWrapper_descriptor,
-        new java.lang.String[] { "Type", "Code", "Timestamp", "Chat", "Player", "Body", });
-    proto.Player.getDescriptor();
+        new java.lang.String[] { "Type", "Code", "Timestamp", "Chat", "LobbyCmd", "GlobalCmd", "Body", });
+    proto.Command.getDescriptor();
   }
 
   // @@protoc_insertion_point(outer_class_scope)

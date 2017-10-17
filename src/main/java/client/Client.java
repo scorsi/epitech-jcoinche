@@ -1,5 +1,8 @@
-package net.client;
+package client;
 
+import client.command.Commands;
+import client.command.ICommand;
+import client.net.ClientInitializer;
 import io.netty.bootstrap.Bootstrap;
 import io.netty.channel.Channel;
 import io.netty.channel.EventLoopGroup;
@@ -17,8 +20,7 @@ public class Client {
 
     private static final int SERVER_PORT = 8000;
 
-    public static void main(String[] args)
-    {
+    public static void main(String[] args) {
         Client client = new Client("localhost", SERVER_PORT);
 
         try {
@@ -36,9 +38,6 @@ public class Client {
     private Channel serverChannel = null;
     private final String host;
     private final int port;
-    private static final Timestamp timestamp = new Timestamp(System.currentTimeMillis());
-    private MessageWrapper.Builder wrapperBuilder = MessageWrapper.newBuilder();
-    private MessageChat.Builder chatBuilder = MessageChat.newBuilder();
 
     private Client(String host, int port) {
         this.host = host;
@@ -46,14 +45,22 @@ public class Client {
     }
 
     private void sendMsg(String msg) {
-        timestamp.setTime(System.currentTimeMillis());
+        this.serverChannel.writeAndFlush(
+                MessageWrapper.newBuilder()
+                        .setType(MessageWrapper.MessageType.CHAT)
+                        .setChat(MessageChat.newBuilder().setText(msg).build())
+                        .setTimestamp(new Timestamp(System.currentTimeMillis()).getTime())
+                        .setCode(0)
+                        .build()
+        );
+    }
 
-        this.wrapperBuilder.setType(MessageWrapper.MessageType.CHAT)
-                .setChat(this.chatBuilder.setText(msg).build())
-                .setCode(0)
-                .setTimestamp(timestamp.getTime());
-
-        this.serverChannel.writeAndFlush(wrapperBuilder.build());
+    private void checkMsg(String msg) {
+        try {
+            ((ICommand)(Commands.from(msg).newInstance())).run(msg, this.serverChannel);
+        } catch (Exception e) {
+            this.sendMsg(msg);
+        }
     }
 
     private void run() throws Exception {
@@ -73,8 +80,9 @@ public class Client {
                 String str = in.readLine();
                 if (str.equals("/exit"))
                     running = false;
-                else
-                    this.sendMsg(str);
+                else {
+                    this.checkMsg(str);
+                }
             }
         }
         finally {
