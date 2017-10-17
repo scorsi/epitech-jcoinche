@@ -1,0 +1,24 @@
+syntax = "proto2";
+
+package proto;
+
+option java_package = "proto";
+option java_outer_classname = "Command";
+
+message LobbyCmd {
+    enum Cmd {
+        TEAM = 1;
+    }
+
+    required Cmd cmd = 1;
+    required string value = 2;
+}
+
+message GlobalCmd {
+    enum Cmd {
+        USERNAME = 1;
+    }
+
+    required Cmd cmd = 1;
+    required string value = 2;
+}

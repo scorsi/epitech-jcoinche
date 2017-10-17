@@ -2,7 +2,7 @@ syntax = "proto2";
 
 package proto;
 
-import "Player.proto";
+import "Command.proto";
 
 option java_package = "proto";
 option java_outer_classname = "Message";
@@ -15,7 +15,8 @@ message MessageChat {
 message MessageWrapper {
     enum MessageType {
         CHAT = 1;
-        PLAYER_CONNECTION = 2;
+        LOBBY_CMD = 2;
+        GLOBAL_CMD = 3;
     }
 
     required MessageType type = 1;
@@ -25,6 +26,7 @@ message MessageWrapper {
 
     oneof body {
         MessageChat chat = 4;
-        PlayerConnection player = 5;
+        LobbyCmd lobbyCmd = 5;
+        GlobalCmd globalCmd = 6;
     }
 }
