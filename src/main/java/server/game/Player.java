@@ -2,6 +2,7 @@ package server.game;
 
 public class Player {
 
+    private Team team;
     private String name;
     private Deck deck;
 
@@ -27,4 +28,14 @@ public class Player {
         this.deck = deck;
         return this;
     }
+
+    public Team getTeam() {
+        return team;
+    }
+
+    public Player setTeam(Team team) {
+        this.team = team;
+        return this;
+    }
+
 }

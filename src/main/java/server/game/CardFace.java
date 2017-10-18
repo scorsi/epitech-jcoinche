@@ -26,6 +26,17 @@ public enum CardFace {
         this.pointIsNotTrump = pointIsNotTrump;
     }
 
+    public static CardFace from(int i) {
+        int j = 0;
+
+        for (CardFace card : values()) {
+            if (j == i)
+                return card;
+            j++;
+        }
+        return As;
+    }
+
     public String getName() {
         return name;
     }

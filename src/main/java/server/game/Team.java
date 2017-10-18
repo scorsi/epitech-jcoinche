@@ -1,4 +1,6 @@
 package server.game;
 
-public class Team {
+public enum Team {
+    Red,
+    Blue;
 }
