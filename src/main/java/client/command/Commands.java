@@ -3,7 +3,11 @@ package client.command;
 public enum Commands {
 
     Username(new String[]{"/username", "/name", "/u"}, Username.class),
-    Team(new String[]{"/team", "/t"}, Team.class);
+    Team(new String[]{"/team", "/t"}, Team.class),
+    Create(new String[]{"/create", "/c"}, Create.class),
+    Join(new String[]{"/join", "/j"}, Join.class),
+    ListChannel(new String[]{"/list-channel"}, ListChannel.class),
+    Leave(new String[]{"/leave", "/l"}, Leave.class);
 
 
     private String[] aliases;

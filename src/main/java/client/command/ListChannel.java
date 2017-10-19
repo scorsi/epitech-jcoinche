@@ -6,15 +6,15 @@ import proto.Message;
 
 import java.sql.Timestamp;
 
-public class Join implements ICommand {
+public class ListChannel implements ICommand {
 
     public void run(String msg, Channel serverChannel) throws Exception {
         serverChannel.writeAndFlush(
                 Message.MessageWrapper.newBuilder()
                         .setType(Message.MessageWrapper.MessageType.GLOBAL_CMD)
                         .setGlobalCmd(GlobalCmd.newBuilder()
-                                .setCmdType(GlobalCmd.CmdType.JOIN)
-                                .setValue(msg.split("\\s+")[1])
+                                .setCmdType(GlobalCmd.CmdType.LIST_CHANNEL)
+                                .setValue("")
                                 .build())
                         .setTimestamp(new Timestamp(System.currentTimeMillis()).getTime())
                         .setCode(0)
