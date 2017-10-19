@@ -3,7 +3,7 @@ package server.net;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.SimpleChannelInboundHandler;
 
-import server.LobbyManager;
+import server.lobby.LobbyManager;
 import proto.Message.MessageWrapper;
 
 public class ServerHandler extends SimpleChannelInboundHandler<MessageWrapper> {
