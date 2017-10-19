@@ -6,10 +6,10 @@ public enum Commands {
     Team(new String[]{"/team", "/t"}, Team.class),
     Create(new String[]{"/create", "/c"}, Create.class),
     Join(new String[]{"/join", "/j"}, Join.class),
+    ListPlayers(new String[]{"/list-players"}, ListPlayers.class),
     ListChannel(new String[]{"/list-channel"}, ListChannel.class),
     Leave(new String[]{"/leave", "/l"}, Leave.class),
-    ShowCards(new String[]{"/show-cards"}, ShowCards.class),
-    ListPLayers(new String[]{"list-players"}, ListPlayers.class);
+    ShowCards(new String[]{"/show-cards"}, ShowCards.class);
 
     private String[] aliases;
     private Class command;
