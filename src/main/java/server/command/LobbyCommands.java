@@ -1,6 +1,5 @@
 package server.command;
 
-import client.command.ListPlayers;
 import proto.Command.LobbyCmd.CmdType;
 
 public enum LobbyCommands {
