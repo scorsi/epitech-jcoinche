@@ -1,9 +1,7 @@
-package server;
+package server.lobby;
 
 import io.netty.channel.Channel;
 
-import proto.Command.GlobalCmd;
-import proto.Command.LobbyCmd;
 import proto.Message.MessageWrapper;
 import proto.Message.MessageChat;
 import server.command.CommandManager;
@@ -33,23 +31,21 @@ public class LobbyManager {
     }
 
     public void putPlayersToWaitingList(HashMap<Channel, Player> players) {
-        this.waitingPlayers.putAll(players);
+        this.getWaitingPlayers().putAll(players);
     }
 
     public void connectPlayer(Channel channel) {
         ++nbPlayer;
         Player player = new Player("Player_" + nbPlayer);
 
-        this.waitingPlayers.put(channel, player);
+        this.getWaitingPlayers().put(channel, player);
 
         this.sendMsg(channel, "[Server] Welcome to the jCoinche server!\nYour name is " + player.getName() + ". You can change it by typing \"/username {name}\".");
-
-        this.checkForAvailableLobby();
     }
 
     public void disconnectPlayer(Channel channel) {
-        if (this.waitingPlayers.containsKey(channel))
-            this.waitingPlayers.remove(channel);
+        if (this.getWaitingPlayers().containsKey(channel))
+            this.getWaitingPlayers().remove(channel);
         else {
             Lobby lobbyToShutdown = this.getLobbyByChannel(channel);
 
@@ -57,15 +53,28 @@ public class LobbyManager {
                 return;
 
             lobbyToShutdown.shutdown(channel);
-            lobbies.remove(lobbyToShutdown);
+            this.getLobbies().remove(lobbyToShutdown);
         }
     }
 
     public Lobby getLobbyByChannel(Channel channel) {
         Lobby lobbyToReturn = null;
 
-        for (Lobby lobby : lobbies) {
+        for (Lobby lobby : this.getLobbies()) {
             if (lobby.has(channel)) {
+                lobbyToReturn = lobby;
+                break;
+            }
+        }
+
+        return lobbyToReturn;
+    }
+
+    public Lobby getLobbyByName(String name) {
+        Lobby lobbyToReturn = null;
+
+        for (Lobby lobby : this.getLobbies()) {
+            if (lobby.getName().toLowerCase().equals(name.toLowerCase())) {
                 lobbyToReturn = lobby;
                 break;
             }
@@ -87,32 +96,27 @@ public class LobbyManager {
         );
     }
 
-    private void checkForAvailableLobby() {
-        if (this.waitingPlayers.size() >= 4) {
-            HashMap<Channel, Player> map = new HashMap<>();
-
-            for (Entry<Channel, Player> player : this.waitingPlayers.entrySet()) {
-                map.put(player.getKey(), player.getValue());
-                if (map.size() == 4) break;
-            }
-
-            for (Channel channel : map.keySet()) {
-                this.waitingPlayers.remove(channel);
-            }
-
-            this.createLobby(map);
-        }
+    public Lobby createLobby(String name) {
+        this.getLobbies().add(new Lobby(this, name));
+        return this.getLobbyByName(name);
     }
 
-    public void createLobby(HashMap<Channel, Player> map) {
-        this.lobbies.add(new Lobby(this, map));
+    public boolean movePlayer(Channel channel, Lobby lobby) {
+        Player playerToMove = this.getWaitingPlayers().get(channel);
+        if (playerToMove != null) {
+            lobby.addPlayer(channel, playerToMove);
+            this.getWaitingPlayers().remove(channel);
+            return true;
+        }
+        return false;
     }
 
     public HashMap<Channel, Player> getWaitingPlayers() {
-        return waitingPlayers;
+        return this.waitingPlayers;
     }
 
     public List<Lobby> getLobbies() {
-        return lobbies;
+        return this.lobbies;
     }
+
 }

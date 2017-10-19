@@ -1,10 +1,13 @@
-package server;
+package server.lobby;
 
 import proto.Message.MessageWrapper;
 import proto.Message.MessageChat;
 
 import io.netty.channel.Channel;
 import server.game.Player;
+import server.game.Team;
+import server.lobby.state.AState;
+import server.lobby.state.WaitingState;
 
 import java.sql.Timestamp;
 import java.util.HashMap;
@@ -16,16 +19,31 @@ public class Lobby {
 
     private HashMap<Channel, Player> players;
     private boolean isShuttingDown = false;
+    private AState actualState = null;
+    private String name;
 
-    Lobby(LobbyManager lobbyManager, HashMap<Channel, Player> incomingPlayers) {
+    Lobby(LobbyManager lobbyManager, String name) {
         this.lobbyManager = lobbyManager;
-        this.players = incomingPlayers;
+        this.name = name;
+        this.players = new HashMap<>();
+        this.actualState = new WaitingState(this).initialize();
+    }
 
-        this.broadcast("You have been moved to a lobby. The game will start shortly.", null);
+    public void checkState() {
+        if (this.actualState.isFinished()) {
+            this.actualState = this.actualState.getNextState().initialize();
+            this.checkState();
+        }
     }
 
     public boolean has(Channel channel) {
         return this.players.containsKey(channel);
+    }
+
+    public void addPlayer(Channel channel, Player player) {
+        this.players.put(channel, player);
+
+        this.sendMsg("[SERVER] You have been moved to a lobby.", channel);
     }
 
     public void shutdown(Channel disconnectedChannel) {
@@ -40,6 +58,19 @@ public class Lobby {
         this.players.clear();
     }
 
+    private void sendMsg(String msg, Channel channel) {
+        channel.writeAndFlush(
+                MessageWrapper.newBuilder()
+                        .setTimestamp(new Timestamp(System.currentTimeMillis()).getTime())
+                        .setType(MessageWrapper.MessageType.CHAT)
+                        .setChat(MessageChat.newBuilder()
+                                .setText(msg)
+                                .build())
+                        .setCode(0)
+                        .build()
+        );
+    }
+
     public void broadcast(String msg, Channel incomingChannel) {
         String name = "Server";
         if (incomingChannel != null)
@@ -47,16 +78,7 @@ public class Lobby {
 
         for (Channel channel : this.players.keySet()) {
             if (incomingChannel == null || channel.remoteAddress() != incomingChannel.remoteAddress()) {
-                channel.writeAndFlush(
-                        MessageWrapper.newBuilder()
-                                .setTimestamp(new Timestamp(System.currentTimeMillis()).getTime())
-                                .setType(MessageWrapper.MessageType.CHAT)
-                                .setChat(MessageChat.newBuilder()
-                                        .setText("[" + name + "] " + msg)
-                                        .build())
-                                .setCode(0)
-                                .build()
-                );
+                this.sendMsg("[" + name + "] " + msg, channel);
             }
         }
     }
@@ -71,5 +93,13 @@ public class Lobby {
 
     public LobbyManager getLobbyManager() {
         return lobbyManager;
+    }
+
+    public AState getActualState() {
+        return actualState;
+    }
+
+    public String getName() {
+        return name;
     }
 }
