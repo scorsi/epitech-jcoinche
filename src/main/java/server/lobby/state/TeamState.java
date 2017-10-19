@@ -13,6 +13,7 @@ public class TeamState extends AState {
 
     @Override
     public AState initialize() {
+        this.getLobby().broadcast("The lobby is complete, you can choose your teams.", null);
         for (Player player : this.getLobby().getPlayers()) {
             player.setTeam(Team.Undefined);
         }
