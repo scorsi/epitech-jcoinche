@@ -8,7 +8,6 @@ import java.sql.Timestamp;
 
 public class Leave implements ICommand {
 
-    @Override
     public void run(String msg, Channel serverChannel) throws Exception {
         serverChannel.writeAndFlush(
                 Message.MessageWrapper.newBuilder()
