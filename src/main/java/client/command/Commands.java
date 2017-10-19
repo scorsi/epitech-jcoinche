@@ -7,8 +7,9 @@ public enum Commands {
     Create(new String[]{"/create", "/c"}, Create.class),
     Join(new String[]{"/join", "/j"}, Join.class),
     ListChannel(new String[]{"/list-channel"}, ListChannel.class),
-    Leave(new String[]{"/leave", "/l"}, Leave.class);
-
+    Leave(new String[]{"/leave", "/l"}, Leave.class),
+    ShowCards(new String[]{"/show-cards"}, ShowCards.class),
+    ListPLayers(new String[]{"list-players"}, ListPlayers.class);
 
     private String[] aliases;
     private Class command;
