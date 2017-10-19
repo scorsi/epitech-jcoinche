@@ -16,7 +16,7 @@ public class Team implements ICommand {
                         .setType(Message.MessageWrapper.MessageType.LOBBY_CMD)
                         .setLobbyCmd(LobbyCmd.newBuilder()
                                 .setCmdType(LobbyCmd.CmdType.TEAM)
-                                .setValue(msg.split("\\s+")[1].toUpperCase())
+                                .setValue(team)
                                 .build())
                         .setTimestamp(new Timestamp(System.currentTimeMillis()).getTime())
                         .setCode(0)
