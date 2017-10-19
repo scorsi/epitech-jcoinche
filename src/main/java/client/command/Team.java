@@ -9,7 +9,9 @@ import java.sql.Timestamp;
 public class Team implements ICommand {
 
     public void run(String msg, Channel serverChannel) throws Exception {
-        serverChannel.writeAndFlush(
+        String team = msg.split("\\s+")[1].toUpperCase();
+        if (team.equals("RED") || team.equals("BLUE"))
+            serverChannel.writeAndFlush(
                 Message.MessageWrapper.newBuilder()
                         .setType(Message.MessageWrapper.MessageType.LOBBY_CMD)
                         .setLobbyCmd(LobbyCmd.newBuilder()
@@ -19,7 +21,9 @@ public class Team implements ICommand {
                         .setTimestamp(new Timestamp(System.currentTimeMillis()).getTime())
                         .setCode(0)
                         .build()
-        );
+            );
+        else
+            throw new Exception();
     }
 
 }
