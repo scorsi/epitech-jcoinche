@@ -6,25 +6,26 @@ import server.lobby.Lobby;
 
 import io.netty.channel.Channel;
 
-public class WaitingState extends AState {
+public class DrawState extends AState {
 
-    public WaitingState(Lobby lobby) {
-        super("Waiting", lobby);
+    public DrawState(Lobby lobby) {
+        super("Draw", lobby);
     }
 
     @Override
     public AState initialize() {
+        this.getLobby().broadcast("All teams are complete. Distribution of cards.", null);
         return this;
     }
 
     @Override
     public boolean isFinished() {
-        return this.getLobby().getPlayers().size() == 4;
+        return false;
     }
 
     @Override
     public AState getNextState() {
-        return new TeamState(this.getLobby());
+        return null;
     }
 
     @Override
