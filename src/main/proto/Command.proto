@@ -10,6 +10,7 @@ message LobbyCmd {
         LEAVE = 1;
         TEAM = 2;
         LIST_PLAYER = 3;
+        SHOW_CARDS = 4;
     }
 
     required CmdType cmdType = 1;
