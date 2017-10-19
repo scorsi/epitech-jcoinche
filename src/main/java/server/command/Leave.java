@@ -16,7 +16,7 @@ public class Leave implements ILobbyCommand {
         }
 
         lobbyToLeave.removePlayer(channel);
-        commandManager.sendMsg(channel, "[SERVER] You successfully left the channel" + lobbyToLeave.getName() + ".");
+        commandManager.sendMsg(channel, "[SERVER] You successfully left the channel " + lobbyToLeave.getName() + ".");
     }
 
 }
