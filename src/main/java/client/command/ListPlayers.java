@@ -13,7 +13,7 @@ public class ListPlayers implements ICommand {
                 Message.MessageWrapper.newBuilder()
                         .setType(Message.MessageWrapper.MessageType.LOBBY_CMD)
                         .setLobbyCmd(LobbyCmd.newBuilder()
-                                .setCmdType(LobbyCmd.CmdType.LIST_PLAYER)
+                                .setCmdType(LobbyCmd.CmdType.LIST_PLAYERS)
                                 .setValue("")
                                 .build())
                         .setTimestamp(new Timestamp(System.currentTimeMillis()).getTime())
