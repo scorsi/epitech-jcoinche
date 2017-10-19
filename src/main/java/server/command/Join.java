@@ -6,7 +6,6 @@ import server.lobby.Lobby;
 
 public class Join implements IGlobalCommand {
 
-    @Override
     public void run(Channel channel, GlobalCmd cmd, CommandManager commandManager) {
         if (!commandManager.getLobbyManager().getWaitingPlayers().containsKey(channel)) {
             commandManager.sendMsg(channel, "[SERVER] You must leave your lobby before you can join another.");

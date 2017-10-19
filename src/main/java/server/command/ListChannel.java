@@ -6,7 +6,6 @@ import server.lobby.Lobby;
 
 public class ListChannel implements IGlobalCommand {
 
-    @Override
     public void run(Channel channel, Command.GlobalCmd cmd, CommandManager commandManager) throws Exception {
         if (commandManager.getLobbyManager().getLobbies().size() <= 0) {
             commandManager.sendMsg(channel, "[SERVER] There is no channel.");

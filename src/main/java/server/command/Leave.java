@@ -6,7 +6,6 @@ import server.lobby.Lobby;
 
 public class Leave implements ILobbyCommand {
 
-    @Override
     public void run(Channel channel, Command.LobbyCmd cmd, CommandManager commandManager) throws Exception {
         Lobby lobbyToLeave = commandManager.getLobbyManager().getLobbyByChannel(channel);
 
