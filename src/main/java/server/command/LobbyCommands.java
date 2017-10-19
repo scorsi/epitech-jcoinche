@@ -1,11 +1,15 @@
 package server.command;
 
+import client.command.ListPlayers;
 import proto.Command.LobbyCmd.CmdType;
 
 public enum LobbyCommands {
 
     Team(CmdType.TEAM, Team.class),
-    Leave(CmdType.LEAVE, Leave.class);
+    Leave(CmdType.LEAVE, Leave.class),
+    ListPlayers(CmdType.LIST_PLAYERS, ListPlayers.class),
+    ShowCards(CmdType.SHOW_CARDS, ShowCards.class);
+
 
 
     private CmdType cmdType;
