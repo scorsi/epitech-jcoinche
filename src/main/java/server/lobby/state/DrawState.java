@@ -1,12 +1,18 @@
 package server.lobby.state;
 
 import proto.Command;
+import server.game.Deck;
+import server.game.DeckGenerator;
 import server.game.Player;
 import server.lobby.Lobby;
 
 import io.netty.channel.Channel;
 
+import java.util.List;
+
 public class DrawState extends AState {
+
+    private boolean isGenerated = false;
 
     public DrawState(Lobby lobby) {
         super("Draw", lobby);
@@ -15,17 +21,23 @@ public class DrawState extends AState {
     @Override
     public AState initialize() {
         this.getLobby().broadcast("All teams are complete. Distribution of cards.", null);
+        List<Deck> decks = new DeckGenerator().generateAllDecks();
+        for (Player player : this.getLobby().getPlayers()) {
+            player.setDeck(decks.get(0));
+            decks.remove(0);
+        }
+        this.isGenerated = true;
         return this;
     }
 
     @Override
     public boolean isFinished() {
-        return false;
+        return this.isGenerated;
     }
 
     @Override
     public AState getNextState() {
-        return null;
+        return new TurnState(this.getLobby());
     }
 
     @Override
