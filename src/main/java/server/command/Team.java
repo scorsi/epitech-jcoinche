@@ -12,6 +12,7 @@ public class Team implements ILobbyCommand {
             throw new Exception();
         }
         Lobby lobby = commandManager.getLobbyManager().getLobbyByChannel(channel);
+        lobby.getActualState().handleAction(channel, cmd);
     }
 
 }

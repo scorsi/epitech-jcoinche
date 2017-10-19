@@ -72,7 +72,7 @@ public class Lobby {
         System.out.println("Lobby " + this.getName() + " has been automatically destroyed.");
     }
 
-    private void sendMsg(String msg, Channel channel) {
+    public void sendMsg(String msg, Channel channel) {
         channel.writeAndFlush(
                 MessageWrapper.newBuilder()
                         .setTimestamp(new Timestamp(System.currentTimeMillis()).getTime())
@@ -86,7 +86,7 @@ public class Lobby {
     }
 
     public void broadcast(String msg, Channel incomingChannel) {
-        String name = "Server";
+        String name = "SERVER";
         if (incomingChannel != null)
             name = this.players.get(incomingChannel).getName();
 

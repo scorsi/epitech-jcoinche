@@ -28,6 +28,10 @@ public class LobbyManager {
 
     public void handleAction(Channel channel, MessageWrapper msg) {
         this.commandManager.handle(channel, msg);
+        Lobby lobbyToUpdate = this.getLobbyByChannel(channel);
+        if (lobbyToUpdate != null) {
+            lobbyToUpdate.checkState();
+        }
     }
 
     public void putPlayerToWaitingList(Channel channel, Player player) {
@@ -44,7 +48,7 @@ public class LobbyManager {
 
         this.getWaitingPlayers().put(channel, player);
 
-        this.sendMsg(channel, "[Server] Welcome to the jCoinche server!\nYour name is " + player.getName() + ". You can change it by typing \"/username {name}\".");
+        this.sendMsg(channel, "[SERVER] Welcome to the jCoinche server!\nYour name is " + player.getName() + ". You can change it by typing \"/username {name}\".");
     }
 
     public void disconnectPlayer(Channel channel) {
