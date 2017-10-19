@@ -5,7 +5,6 @@ import proto.Message.MessageChat;
 
 import io.netty.channel.Channel;
 import server.game.Player;
-import server.game.Team;
 import server.lobby.state.AState;
 import server.lobby.state.WaitingState;
 
@@ -44,6 +43,7 @@ public class Lobby {
         this.players.put(channel, player);
 
         this.sendMsg("[SERVER] You have been moved to a lobby.", channel);
+        this.checkState();
     }
 
     public void shutdown(Channel disconnectedChannel) {
