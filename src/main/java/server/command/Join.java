@@ -21,9 +21,9 @@ public class Join implements IGlobalCommand {
             commandManager.sendMsg(channel, "[SERVER] The channel " + cmd.getValue() + " is full, you can't join it.");
             return;
         }
-        commandManager.getLobbyManager().movePlayer(channel, lobbyToJoin);
         System.out.println(channel.remoteAddress() + " has joined the channel " + cmd.getValue());
         commandManager.sendMsg(channel, "[SERVER] You joined the channel " + cmd.getValue() + ".");
+        commandManager.getLobbyManager().movePlayer(channel, lobbyToJoin);
     }
 
 }
