@@ -13,7 +13,7 @@ buildscript {
 apply plugin: 'application'
 apply plugin: 'com.google.protobuf'
 
-mainClassName = "net.server.Server"
+mainClassName = "server.Server"
 sourceCompatibility = 7
 
 repositories {
@@ -56,12 +56,12 @@ protobuf {
 }
 
 jar {
-    baseName = "java-test"
+    baseName = "jcoinche_server"
     version = "0.0.1"
     manifest {
         attributes (
                 "Class-Path" : configurations.compile.collect { it.getName() }.join(' '),
-                "Main-Class" : "net.server.Server"
+                "Main-Class" : "server.Server"
         )
     }
 }

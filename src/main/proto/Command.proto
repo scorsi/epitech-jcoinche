@@ -1,0 +1,30 @@
+syntax = "proto2";
+
+package proto;
+
+option java_package = "proto";
+option java_outer_classname = "Command";
+
+message LobbyCmd {
+    enum CmdType {
+        LEAVE = 1;
+        TEAM = 2;
+        LIST_PLAYER = 3;
+        SHOW_CARDS = 4;
+    }
+
+    required CmdType cmdType = 1;
+    required string value = 2;
+}
+
+message GlobalCmd {
+    enum CmdType {
+        USERNAME = 1;
+        CREATE = 2;
+        JOIN = 3;
+        LIST_CHANNEL = 4;
+    }
+
+    required CmdType cmdType = 1;
+    required string value = 2;
+}

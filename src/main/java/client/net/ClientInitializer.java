@@ -1,4 +1,4 @@
-package net.server;
+package client.net;
 
 import io.netty.channel.ChannelInitializer;
 import io.netty.channel.ChannelPipeline;
@@ -10,7 +10,7 @@ import io.netty.handler.codec.protobuf.ProtobufVarint32FrameDecoder;
 
 import proto.Message.MessageWrapper;
 
-public class ServerInitializer extends ChannelInitializer<SocketChannel> {
+public class ClientInitializer extends ChannelInitializer<SocketChannel> {
 
     @Override
     protected void initChannel(SocketChannel ch) {
@@ -21,7 +21,7 @@ public class ServerInitializer extends ChannelInitializer<SocketChannel> {
                 .addLast ("frameEncoder", new ProtobufVarint32LengthFieldPrepender())
                 .addLast ("protobufEncoder", new ProtobufEncoder());
 
-        pipeline.addLast("handler", new ServerHandler());
+        pipeline.addLast("handler", new ClientHandler());
     }
 
 }
