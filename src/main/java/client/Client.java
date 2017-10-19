@@ -56,9 +56,13 @@ public class Client {
     }
 
     private void checkMsg(String msg) {
-        try {
-            ((ICommand)(Commands.from(msg).newInstance())).run(msg, this.serverChannel);
-        } catch (Exception e) {
+        if (msg.startsWith("/")) {
+            try {
+                ((ICommand)(Commands.from(msg).newInstance())).run(msg, this.serverChannel);
+            } catch (Exception e) {
+                System.out.println("Invalid command");
+            }
+        } else {
             this.sendMsg(msg);
         }
     }
