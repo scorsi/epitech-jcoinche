@@ -23,7 +23,7 @@ public class Join implements IGlobalCommand {
         }
         commandManager.getLobbyManager().movePlayer(channel, lobbyToJoin);
         System.out.println(channel.remoteAddress() + " has joined the channel " + cmd.getValue());
-        commandManager.sendMsg(channel, "[SERVER] You joined the channel " + cmd.getValue());
+        commandManager.sendMsg(channel, "[SERVER] You joined the channel " + cmd.getValue() + ".");
     }
 
 }

@@ -18,7 +18,7 @@ public class Create implements IGlobalCommand {
             Lobby lobby = commandManager.getLobbyManager().createLobby(cmd.getValue());
             if (commandManager.getLobbyManager().movePlayer(channel, lobby)) {
                 System.out.println(channel.remoteAddress() + " created the channel " + cmd.getValue());
-                commandManager.sendMsg(channel, "[SERVER] You created and joined the channel " + cmd.getValue());
+                commandManager.sendMsg(channel, "[SERVER] You created and joined the channel " + cmd.getValue() + ".");
             } else {
                 commandManager.sendMsg(channel, "[SERVER] You cant join the channel " + cmd.getValue() + ".");
             }
