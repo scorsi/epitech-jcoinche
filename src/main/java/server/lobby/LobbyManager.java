@@ -30,6 +30,10 @@ public class LobbyManager {
         this.commandManager.handle(channel, msg);
     }
 
+    public void putPlayerToWaitingList(Channel channel, Player player) {
+        this.getWaitingPlayers().put(channel, player);
+    }
+
     public void putPlayersToWaitingList(HashMap<Channel, Player> players) {
         this.getWaitingPlayers().putAll(players);
     }

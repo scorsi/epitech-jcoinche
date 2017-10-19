@@ -4,7 +4,8 @@ import proto.Command.LobbyCmd.CmdType;
 
 public enum LobbyCommands {
 
-    Team(CmdType.TEAM, Team.class);
+    Team(CmdType.TEAM, Team.class),
+    Leave(CmdType.LEAVE, Leave.class);
 
 
     private CmdType cmdType;

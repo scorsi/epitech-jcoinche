@@ -40,18 +40,24 @@ public class Lobby {
     }
 
     public void addPlayer(Channel channel, Player player) {
+        this.broadcast(player.getName() + " joined the lobby.", null);
         this.players.put(channel, player);
-
-        this.sendMsg("[SERVER] You have been moved to a lobby.", channel);
         this.checkState();
+    }
+
+    public void removePlayer(Channel channel) {
+        Player playerToRemove = this.getPlayer(channel);
+        if (playerToRemove == null)
+            return;
+        this.getLobbyManager().putPlayerToWaitingList(channel, playerToRemove);
+        this.players.remove(channel);
+        this.broadcast(playerToRemove.getName() + " left the game.", null);
     }
 
     public void shutdown(Channel disconnectedChannel) {
         if (this.isShuttingDown)
             return;
         this.isShuttingDown = true;
-
-        this.broadcast("You have been moved to the waiting list because a player left the game.", disconnectedChannel);
 
         this.getLobbyManager().putPlayersToWaitingList(this.players);
 
