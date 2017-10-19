@@ -8,6 +8,10 @@ public class Create implements IGlobalCommand {
 
     @Override
     public void run(Channel channel, GlobalCmd cmd, CommandManager commandManager) throws Exception {
+        if (!commandManager.getLobbyManager().getWaitingPlayers().containsKey(channel)) {
+            commandManager.sendMsg(channel, "[SERVER] You must leave your lobby before you can create one.");
+            return;
+        }
         if (commandManager.getLobbyManager().getLobbyByName(cmd.getValue()) != null) {
             commandManager.sendMsg(channel, "[SERVER] The channel " + cmd.getValue() + " is already created.");
         } else {
