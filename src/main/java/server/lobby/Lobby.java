@@ -51,10 +51,16 @@ public class Lobby {
             return;
         this.getLobbyManager().putPlayerToWaitingList(channel, playerToRemove);
         this.players.remove(channel);
-        this.broadcast(playerToRemove.getName() + " left the game.", null);
+
+        if (this.players.size() == 0) {
+            this.shutdown();
+            this.getLobbyManager().getLobbies().remove(this);
+        } else {
+            this.broadcast(playerToRemove.getName() + " left the game.", null);
+        }
     }
 
-    public void shutdown(Channel disconnectedChannel) {
+    public void shutdown() {
         if (this.isShuttingDown)
             return;
         this.isShuttingDown = true;
@@ -62,6 +68,8 @@ public class Lobby {
         this.getLobbyManager().putPlayersToWaitingList(this.players);
 
         this.players.clear();
+
+        System.out.println("Lobby " + this.getName() + " has been automatically destroyed.");
     }
 
     private void sendMsg(String msg, Channel channel) {

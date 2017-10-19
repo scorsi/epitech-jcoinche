@@ -56,7 +56,7 @@ public class LobbyManager {
             if (lobbyToShutdown == null)
                 return;
 
-            lobbyToShutdown.shutdown(channel);
+            lobbyToShutdown.shutdown();
             this.getLobbies().remove(lobbyToShutdown);
         }
     }
