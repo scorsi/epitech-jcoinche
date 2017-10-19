@@ -15,7 +15,11 @@ public class ListChannel implements IGlobalCommand {
 
             stringBuilder.append("[SERVER] List of channels:");
             for (Lobby lobby : commandManager.getLobbyManager().getLobbies()) {
-                stringBuilder.append("\n-> ").append(lobby.getName());
+                stringBuilder.append("\n-> ")
+                        .append(lobby.getName())
+                        .append(" (")
+                        .append(lobby.getNumberOfPlayers())
+                        .append("/4)");
             }
 
             commandManager.sendMsg(channel, stringBuilder.toString());

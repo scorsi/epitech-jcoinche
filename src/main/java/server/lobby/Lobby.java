@@ -97,6 +97,10 @@ public class Lobby {
         }
     }
 
+    public int getNumberOfPlayers() {
+        return this.players.size();
+    }
+
     public Collection<Player> getPlayers() {
         return this.players.values();
     }
