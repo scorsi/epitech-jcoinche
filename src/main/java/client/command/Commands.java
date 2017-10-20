@@ -9,7 +9,9 @@ public enum Commands {
     ListPlayers(new String[]{"/list-players"}, ListPlayers.class),
     ListChannel(new String[]{"/list-channel"}, ListChannel.class),
     Leave(new String[]{"/leave", "/l"}, Leave.class),
-    ShowCards(new String[]{"/show-cards"}, ShowCards.class);
+    ShowCards(new String[]{"/show-cards"}, ShowCards.class),
+    ShowTable(new String[]{"/show-table"}, ShowTable.class),
+    PlayCard(new String[]{"/play"}, PlayCard.class);
 
     private String[] aliases;
     private Class command;
