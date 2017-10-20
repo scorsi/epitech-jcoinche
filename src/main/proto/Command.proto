@@ -5,6 +5,29 @@ package proto;
 option java_package = "proto";
 option java_outer_classname = "Command";
 
+message Card {
+    enum Face {
+        AS = 1;
+        KING = 2;
+        QUEEN = 3;
+        JACK = 4;
+        TEN = 5;
+        NINE = 6;
+        EIGHT = 7;
+        SEVEN = 8;
+    }
+
+    enum Color {
+        SPADE = 1;
+        HEART = 2;
+        CLUB = 3;
+        DIAMOND = 4;
+    }
+
+    required Face face = 1;
+    required Color color = 2;
+}
+
 message LobbyCmd {
     enum CmdType {
         LEAVE = 1;
@@ -14,7 +37,10 @@ message LobbyCmd {
     }
 
     required CmdType cmdType = 1;
-    required string value = 2;
+    oneof body {
+        string value = 2;
+        Card card = 3;
+    }
 }
 
 message GlobalCmd {
