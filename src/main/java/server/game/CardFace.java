@@ -1,5 +1,9 @@
 package server.game;
 
+import io.netty.channel.socket.nio.NioServerSocketChannel;
+import proto.Command;
+import server.Server;
+
 public enum CardFace {
 
     Seven("7", 0, 0, 0, 0),
@@ -24,6 +28,28 @@ public enum CardFace {
         this.pointNoTrump = pointNoTrump;
         this.pointOneTrump = pointOneTrump;
         this.pointIsNotTrump = pointIsNotTrump;
+    }
+
+    public static CardFace from(Command.Card.Face face) {
+        switch (face) {
+            case AS:
+                return As;
+            case SEVEN:
+                return Seven;
+            case EIGHT:
+                return Eight;
+            case NINE:
+                return Nine;
+            case TEN:
+                return Ten;
+            case JACK:
+                return Jack;
+            case QUEEN:
+                return Queen;
+            case KING:
+                return King;
+        }
+        return null;
     }
 
     public static CardFace from(int i) {
