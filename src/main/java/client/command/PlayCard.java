@@ -16,6 +16,7 @@ public class PlayCard implements ICommand {
 
         Command.Card.Face face;
         switch (args[1].toUpperCase()) {
+            case "1" :
             case "AS" :
                 face = Command.Card.Face.AS;
                 break;
@@ -28,15 +29,19 @@ public class PlayCard implements ICommand {
             case "JACK" :
                 face = Command.Card.Face.JACK;
                 break;
+            case "10" :
             case "TEN" :
                 face = Command.Card.Face.TEN;
                 break;
+            case "9" :
             case "NINE" :
                 face = Command.Card.Face.NINE;
                 break;
+            case "8" :
             case "EIGHT" :
                 face = Command.Card.Face.EIGHT;
                 break;
+            case "7" :
             case "SEVEN" :
                 face = Command.Card.Face.SEVEN;
                 break;
