@@ -2,6 +2,8 @@ package server.lobby.state;
 
 import io.netty.channel.Channel;
 import proto.Command;
+import server.game.Card;
+import server.game.Deck;
 import server.lobby.Lobby;
 
 public class TurnState extends AState {
@@ -28,7 +30,19 @@ public class TurnState extends AState {
 
     @Override
     public void handleAction(Channel channel, Command.LobbyCmd cmd) {
+        Deck deck = this.getLobby().getPlayer(channel).getDeck();
 
+        StringBuilder stringBuilder = new StringBuilder();
+
+        stringBuilder.append("[SERVER] List of your cards:");
+        for (Card card : deck.getCards()) {
+            stringBuilder.append("\n-> ")
+                    .append(card.getFaceName())
+                    .append(" of ")
+                    .append(card.getColorName());
+        }
+
+        this.getLobby().sendMsg(stringBuilder.toString(), channel);
     }
 
 }
