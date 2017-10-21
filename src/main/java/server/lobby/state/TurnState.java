@@ -11,7 +11,7 @@ import java.util.Map;
 public class TurnState extends AState {
 
     private HashMap<Player, Card> table;
-    int playerTurn;
+    private int playerTurn;
 
     public TurnState(Lobby lobby) {
         super("Turn", lobby);
@@ -108,9 +108,16 @@ public class TurnState extends AState {
                 this.getLobby().getChannelByPlayer(player));
     }
 
+    private void calculateAllPoints() {
+        this.table.clear();
+    }
+
     private void nextPlayer() {
         this.playerTurn++;
-        this.playerTurn %= 4;
+        if (this.playerTurn == 4) {
+            this.playerTurn = 0;
+            this.calculateAllPoints();
+        }
         System.out.println(this.playerTurn);
         this.displayTurnMessage();
     }

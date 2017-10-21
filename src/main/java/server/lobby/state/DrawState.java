@@ -37,7 +37,7 @@ public class DrawState extends AState {
 
     @Override
     public AState getNextState() {
-        return new TurnState(this.getLobby());
+        return new ContractState(this.getLobby());
     }
 
     @Override
