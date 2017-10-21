@@ -46,7 +46,14 @@ public class TurnState extends AState {
             this.handlePlayCard(channel, cmd);
         } else if (cmd.getCmdType().equals(Command.LobbyCmd.CmdType.SHOW_TABLE)) {
             this.handleShowTable(channel, cmd);
+        } else if (cmd.getCmdType().equals(Command.LobbyCmd.CmdType.SHOW_CONTRACT)) {
+            this.handleShowContract(channel, cmd);
         }
+    }
+
+    private void handleShowContract(Channel channel, Command.LobbyCmd cmd) {
+
+        this.getLobby().sendMsg("[SERVER] The contract is " + this.contract, channel);
     }
 
     private void handleShowTable(Channel channel, Command.LobbyCmd cmd) {

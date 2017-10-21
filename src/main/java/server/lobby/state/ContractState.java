@@ -46,7 +46,17 @@ public class ContractState extends AState {
             this.handleContract(channel, cmd);
         } else if (cmd.getCmdType().equals(Command.LobbyCmd.CmdType.SHOW_CARDS)) {
             this.handleShowCards(channel, cmd);
-        }
+        } else if (cmd.getCmdType().equals(Command.LobbyCmd.CmdType.SHOW_CONTRACT)) {
+        this.handleShowContract(channel, cmd);
+    }
+}
+
+    private void handleShowContract(Channel channel, Command.LobbyCmd cmd) {
+        if (this.contract != null)
+            this.getLobby().sendMsg("[SERVER] The contract is " + this.contract, channel);
+        else
+            this.getLobby().sendMsg("[SERVER] There are no contract", channel);
+
     }
 
     private void handleShowCards(Channel channel, Command.LobbyCmd cmd) {
