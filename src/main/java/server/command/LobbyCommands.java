@@ -8,7 +8,8 @@ public enum LobbyCommands {
     Leave(CmdType.LEAVE, Leave.class),
     ListPlayers(CmdType.LIST_PLAYERS, ListPlayers.class),
     ShowCards(CmdType.SHOW_CARDS, ShowCards.class),
-    Play(CmdType.PLAY_CARD, PlayCard.class);
+    Play(CmdType.PLAY_CARD, PlayCard.class),
+    ShowTable(CmdType.SHOW_TABLE, ShowTable.class);
 
 
 
