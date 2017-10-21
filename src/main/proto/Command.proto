@@ -28,6 +28,22 @@ message Card {
     required Color color = 2;
 }
 
+message Contract {
+    enum Type {
+        SPADE = 1;
+        HEART = 2;
+        CLUB = 3;
+        DIAMOND = 4;
+        COINCHE = 5;
+        PASS = 6;
+        ALL_TRUMP = 7;
+        NO_TRUMP = 8;
+    }
+
+    required Type type = 1;
+    required int32 value = 2;
+}
+
 message LobbyCmd {
     enum CmdType {
         LEAVE = 1;
@@ -36,12 +52,14 @@ message LobbyCmd {
         SHOW_CARDS = 4;
         SHOW_TABLE = 5;
         PLAY_CARD = 6;
+        CONTRACT = 7;
     }
 
     required CmdType cmdType = 1;
     oneof body {
         string value = 2;
         Card card = 3;
+        Contract contract = 4;
     }
 }
 

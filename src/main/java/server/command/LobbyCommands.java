@@ -9,8 +9,8 @@ public enum LobbyCommands {
     ListPlayers(CmdType.LIST_PLAYERS, ListPlayers.class),
     ShowCards(CmdType.SHOW_CARDS, ShowCards.class),
     Play(CmdType.PLAY_CARD, PlayCard.class),
-    ShowTable(CmdType.SHOW_TABLE, ShowTable.class);
-
+    ShowTable(CmdType.SHOW_TABLE, ShowTable.class),
+    Contract(CmdType.CONTRACT, Contract.class);
 
 
     private CmdType cmdType;
