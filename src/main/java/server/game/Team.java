@@ -1,7 +1,7 @@
 package server.game;
 
 public enum Team {
-    Undefined(""),
+    Undifined(""),
     Spectator("Spectator"),
     Red("Red"),
     Blue("Blue");

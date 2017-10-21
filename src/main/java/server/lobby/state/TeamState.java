@@ -16,7 +16,7 @@ public class TeamState extends AState {
     public AState initialize() {
         this.getLobby().broadcast("The lobby is complete, you can choose your teams.", null);
         for (Player player : this.getLobby().getPlayers()) {
-            player.setTeam(Team.Undefined);
+            player.setTeam(Team.Undifined);
         }
         return this;
     }
@@ -24,7 +24,7 @@ public class TeamState extends AState {
     @Override
     public boolean isFinished() {
         for (Player player : this.getLobby().getPlayers()) {
-            if (player.getTeam() == Team.Undefined)
+            if (player.getTeam() == Team.Undifined)
                 return false;
         }
         return true;

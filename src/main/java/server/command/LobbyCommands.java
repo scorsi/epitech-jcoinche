@@ -5,7 +5,13 @@ import proto.Command.LobbyCmd.CmdType;
 public enum LobbyCommands {
 
     Team(CmdType.TEAM, Team.class),
-    Leave(CmdType.LEAVE, Leave.class);
+    Leave(CmdType.LEAVE, Leave.class),
+    ListPlayers(CmdType.LIST_PLAYERS, ListPlayers.class),
+    ShowCards(CmdType.SHOW_CARDS, ShowCards.class),
+    Play(CmdType.PLAY_CARD, PlayCard.class),
+    ShowTable(CmdType.SHOW_TABLE, ShowTable.class),
+    Contract(CmdType.CONTRACT, Contract.class),
+    ShowContract(CmdType.SHOW_CONTRACT, ShowContract.class);
 
 
     private CmdType cmdType;
