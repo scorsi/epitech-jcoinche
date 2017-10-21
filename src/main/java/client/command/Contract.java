@@ -49,6 +49,9 @@ public class Contract implements ICommand {
         int value = 0;
         if (type != Command.Contract.Type.PASS) {
             value = (Integer.parseInt(args[2]) / 10) * 10;
+            if (value < 80 || value > 160) {
+                throw new Exception();
+            }
         }
 
         serverChannel.writeAndFlush(
