@@ -56,12 +56,12 @@ protobuf {
 }
 
 jar {
-    baseName = "jcoinche_server"
+    baseName = "jcoinche_client"
     version = "0.0.1"
     manifest {
         attributes (
                 "Class-Path" : configurations.compile.collect { it.getName() }.join(' '),
-                "Main-Class" : "server.Server"
+                "Main-Class" : "client.Client"
         )
     }
 }
