@@ -12,7 +12,8 @@ public enum Commands {
     Leave(new String[]{"/leave", "/l"}, Leave.class),
     ShowCards(new String[]{"/show-cards"}, ShowCards.class),
     ShowTable(new String[]{"/show-table"}, ShowTable.class),
-    PlayCard(new String[]{"/play"}, PlayCard.class);
+    PlayCard(new String[]{"/play"}, PlayCard.class),
+    ShowContract(new String[]{"/show-contract"}, ShowContract.class);
 
     private String[] aliases;
     private Class command;
