@@ -81,11 +81,29 @@ public class ContractState extends AState {
             if (cmd.getContract().getType().equals(Command.Contract.Type.PASS)) {
                 this.getLobby().broadcast(player.getName() + " passed.", null);
             } else {
+                if (this.contract != null && player.getTeam() == this.contract.getTeam()) {
+                    this.getLobby().sendMsg("[SERVER] You cannot put a contract, the current one was set by your mate",
+                            channel);
+                    return;
+                }
+                if (cmd.getContract().getType().equals(Command.Contract.Type.COINCHE)) {
+                    if (this.contract == null) {
+                        this.getLobby().sendMsg("[SERVER] You cannot coinche, there is no current contract", channel);
+                        return;
+                    } else if (this.contract.getType().equals(Command.Contract.Type.COINCHE))
+                        this.getLobby().broadcast(player.getName() + " called Recoinche!", null);
+                }
+                if (this.contract != null) {
+                    if (this.contract != null && cmd.getContract().getValue() <= this.contract.getValue()) {
+                        this.getLobby().sendMsg("[SERVER] You can only put a contract higher than the current one",
+                                channel);
+                        return;
+                    }
+                }
                 this.getLobby().broadcast(player.getName() + " put a contract: " + cmd.getContract().getType()
                         + " " + cmd.getContract().getValue() + ".", null);
                 this.contract = new Contract(player.getTeam(), cmd.getContract().getType(), cmd.getContract().getValue());
             }
-
             this.playerTurn++;
             this.displayTurnMessage();
         } else {
@@ -94,6 +112,8 @@ public class ContractState extends AState {
     }
 
     private void displayTurnMessage() {
+        if (this.playerTurn >= 4)
+            return;
         Player player = (Player) this.getLobby().getPlayers().toArray()[this.playerTurn];
         this.getLobby().broadcast("This is the turn of " + player.getName() + " to put a contract.", null);
         this.getLobby().sendMsg("[SERVER] This is your turn to choose a contract.",
