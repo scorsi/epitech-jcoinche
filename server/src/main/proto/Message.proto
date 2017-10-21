@@ -1,0 +1,32 @@
+syntax = "proto2";
+
+package proto;
+
+import "Command.proto";
+
+option java_package = "proto";
+option java_outer_classname = "Message";
+
+
+message MessageChat {
+    required string text = 1;
+}
+
+message MessageWrapper {
+    enum MessageType {
+        CHAT = 1;
+        LOBBY_CMD = 2;
+        GLOBAL_CMD = 3;
+    }
+
+    required MessageType type = 1;
+
+    required int32 code = 2; //unique message code
+    required int64 timestamp = 3; //server time
+
+    oneof body {
+        MessageChat chat = 4;
+        LobbyCmd lobbyCmd = 5;
+        GlobalCmd globalCmd = 6;
+    }
+}
