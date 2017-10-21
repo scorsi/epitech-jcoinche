@@ -27,7 +27,7 @@ public enum Commands {
     public static Class from(String text) throws Exception {
         for (Commands command : Commands.values()) {
             for (String alias : command.getAliases()) {
-                if (text.startsWith(alias)) {
+                if (text.startsWith(alias + ' ')) {
                     return command.getCommand();
                 }
             }
