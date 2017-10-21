@@ -2,7 +2,9 @@ package server.lobby.state;
 
 import io.netty.channel.Channel;
 import proto.Command;
+import server.game.Card;
 import server.game.Contract;
+import server.game.Deck;
 import server.game.Player;
 import server.lobby.Lobby;
 
@@ -41,21 +43,43 @@ public class ContractState extends AState {
     @Override
     public void handleAction(Channel channel, Command.LobbyCmd cmd) {
         if (cmd.getCmdType().equals(Command.LobbyCmd.CmdType.CONTRACT)) {
-            Player player = this.getLobby().getPlayer(channel);
-            if (this.getLobby().getPlayers().toArray()[this.playerTurn].equals(player)) {
-                if (cmd.getContract().getType().equals(Command.Contract.Type.PASS)) {
-                    this.getLobby().broadcast(player.getName() + " passed.", null);
-                } else {
-                    this.getLobby().broadcast(player.getName() + " put a contract: " + cmd.getContract().getType()
-                            + " " + cmd.getContract().getValue() + ".", null);
-                    this.contract = new Contract(player.getTeam(), cmd.getContract().getType(), cmd.getContract().getValue());
-                }
+            this.handleContract(channel, cmd);
+        } else if (cmd.getCmdType().equals(Command.LobbyCmd.CmdType.SHOW_CARDS)) {
+            this.handleShowCards(channel, cmd);
+        }
+    }
 
-                this.playerTurn++;
-                this.displayTurnMessage();
+    private void handleShowCards(Channel channel, Command.LobbyCmd cmd) {
+        Deck deck = this.getLobby().getPlayer(channel).getDeck();
+
+        StringBuilder stringBuilder = new StringBuilder();
+
+        stringBuilder.append("[SERVER] List of your cards:");
+        for (Card card : deck.getCards()) {
+            stringBuilder.append("\n-> ")
+                    .append(card.getFaceName())
+                    .append(" of ")
+                    .append(card.getColorName());
+        }
+
+        this.getLobby().sendMsg(stringBuilder.toString(), channel);
+    }
+
+    private void handleContract(Channel channel, Command.LobbyCmd cmd) {
+        Player player = this.getLobby().getPlayer(channel);
+        if (this.getLobby().getPlayers().toArray()[this.playerTurn].equals(player)) {
+            if (cmd.getContract().getType().equals(Command.Contract.Type.PASS)) {
+                this.getLobby().broadcast(player.getName() + " passed.", null);
             } else {
-                this.getLobby().sendMsg("[SERVER] This is not your turn.", channel);
+                this.getLobby().broadcast(player.getName() + " put a contract: " + cmd.getContract().getType()
+                        + " " + cmd.getContract().getValue() + ".", null);
+                this.contract = new Contract(player.getTeam(), cmd.getContract().getType(), cmd.getContract().getValue());
             }
+
+            this.playerTurn++;
+            this.displayTurnMessage();
+        } else {
+            this.getLobby().sendMsg("[SERVER] This is not your turn.", channel);
         }
     }
 
