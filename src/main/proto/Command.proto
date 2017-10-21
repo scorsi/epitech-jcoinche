@@ -53,6 +53,7 @@ message LobbyCmd {
         SHOW_TABLE = 5;
         PLAY_CARD = 6;
         CONTRACT = 7;
+        SHOW_CONTRACT = 8;
     }
 
     required CmdType cmdType = 1;
