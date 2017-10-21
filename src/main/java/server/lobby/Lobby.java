@@ -11,6 +11,7 @@ import server.lobby.state.WaitingState;
 import java.sql.Timestamp;
 import java.util.HashMap;
 import java.util.Collection;
+import java.util.Map;
 
 public class Lobby {
 
@@ -95,6 +96,15 @@ public class Lobby {
                 this.sendMsg("[" + name + "] " + msg, channel);
             }
         }
+    }
+
+    public Channel getChannelByPlayer(Player player) {
+        for (Map.Entry<Channel, Player> entry : this.players.entrySet()) {
+            if (entry.getValue().equals(player)) {
+                return entry.getKey();
+            }
+        }
+        return null;
     }
 
     public int getNumberOfPlayers() {
