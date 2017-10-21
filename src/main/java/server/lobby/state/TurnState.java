@@ -13,6 +13,7 @@ public class TurnState extends AState {
     private HashMap<Player, Card> table;
     private int playerTurn;
     private Contract contract;
+    private HashMap<Team, Integer> points;
 
     public TurnState(Lobby lobby, Contract contract) {
         super("Turn", lobby);
@@ -21,6 +22,9 @@ public class TurnState extends AState {
 
     @Override
     public AState initialize() {
+        this.points = new HashMap<>();
+        this.points.put(Team.Red, 0);
+        this.points.put(Team.Blue, 0);
         this.table = new HashMap<>();
         this.playerTurn = 0;
         this.getLobby().broadcast("The game is ready. Let's play.", null);
@@ -117,15 +121,157 @@ public class TurnState extends AState {
                 this.getLobby().getChannelByPlayer(player));
     }
 
-    private void calculateAllPoints() {
+    private void calculateFoldWinner() {
+        Team teamWinner;
+        switch (this.contract.getType()) {
+            case SPADE:
+            case CLUB:
+            case HEART:
+            case DIAMOND:
+                teamWinner = this.calculateFoldWinnerWithColorTrump();
+                break;
+            case ALL_TRUMP:
+                teamWinner = this.calculateFoldWinnerWithAllTrump();
+                break;
+            case NO_TRUMP:
+            default:
+                teamWinner = this.calculateFoldWinnerWithNoTrump();
+                break;
+        }
+        int foldPoint = this.calculateFoldPoints();
+        this.points.put(teamWinner, this.points.get(teamWinner) + foldPoint);
+
         this.table.clear();
+        System.out.println("Red: " + this.points.get(Team.Red) + ", Blue: " + this.points.get(Team.Blue) + ".");
+    }
+
+    private int calculateFoldPoints() {
+        int foldPoints = 0;
+
+        for (Card card : this.table.values()) {
+            switch (this.contract.getType()) {
+                case SPADE:
+                    if (card.getColorName().equals(CardColor.Spade.getName())) {
+                        foldPoints += card.getPointOneTrump();
+                    } else {
+                        foldPoints += card.getPointIsNotTrump();
+                    }
+                    break;
+                case CLUB:
+                    if (card.getColorName().equals(CardColor.Club.getName())) {
+                        foldPoints += card.getPointOneTrump();
+                    } else {
+                        foldPoints += card.getPointIsNotTrump();
+                    }
+                    break;
+                case HEART:
+                    if (card.getColorName().equals(CardColor.Heart.getName())) {
+                        foldPoints += card.getPointOneTrump();
+                    } else {
+                        foldPoints += card.getPointIsNotTrump();
+                    }
+                    break;
+                case DIAMOND:
+                    if (card.getColorName().equals(CardColor.Diamond.getName())) {
+                        foldPoints += card.getPointOneTrump();
+                    } else {
+                        foldPoints += card.getPointIsNotTrump();
+                    }
+                    break;
+                case NO_TRUMP:
+                    foldPoints += card.getPointNoTrump();
+                    break;
+                case ALL_TRUMP:
+                    foldPoints += card.getPointAllTrump();
+                    break;
+            }
+        }
+        return foldPoints;
+    }
+
+    private Team calculateFoldWinnerWithColorTrump() {
+        CardColor color;
+        switch (this.contract.getType()) {
+            case DIAMOND:
+                color = CardColor.Diamond;
+                break;
+            case HEART:
+                color = CardColor.Heart;
+                break;
+            case CLUB:
+                color = CardColor.Club;
+                break;
+            case SPADE:
+            default:
+                color = CardColor.Spade;
+                break;
+        }
+
+        int higherPoint = -1;
+        Team teamWinner = null;
+
+        for (Map.Entry<Player, Card> entry : this.table.entrySet()) {
+            if (color.getName().equals(entry.getValue().getColorName()) &&
+                    entry.getValue().getPointOneTrump() > higherPoint) {
+                teamWinner = entry.getKey().getTeam();
+                higherPoint = entry.getValue().getPointOneTrump();
+            }
+        }
+
+        if (higherPoint == -1) {
+            color = ((Card) (this.table.values().toArray()[0])).getColor();
+
+            for (Map.Entry<Player, Card> entry : this.table.entrySet()) {
+                if (color.getName().equals(entry.getValue().getColorName()) &&
+                        entry.getValue().getPointIsNotTrump() > higherPoint) {
+                    teamWinner = entry.getKey().getTeam();
+                    higherPoint = entry.getValue().getPointIsNotTrump();
+                }
+            }
+        }
+
+        return teamWinner;
+    }
+
+    private Team calculateFoldWinnerWithAllTrump() {
+        CardColor color = ((Card) (this.table.values().toArray()[0])).getColor();
+
+        int higherPoint = -1;
+        Team teamWinner = null;
+
+        for (Map.Entry<Player, Card> entry : this.table.entrySet()) {
+            if (color.getName().equals(entry.getValue().getColorName()) &&
+                    entry.getValue().getPointAllTrump() > higherPoint) {
+                teamWinner = entry.getKey().getTeam();
+                higherPoint = entry.getValue().getPointAllTrump();
+            }
+        }
+
+        return teamWinner;
+    }
+
+    private Team calculateFoldWinnerWithNoTrump() {
+        CardColor color = ((Card) (this.table.values().toArray()[0])).getColor();
+
+        int higherPoint = -1;
+        Team teamWinner = null;
+
+        for (Map.Entry<Player, Card> entry : this.table.entrySet()) {
+            if (color.getName().equals(entry.getValue().getColorName()) &&
+                    entry.getValue().getPointNoTrump() > higherPoint) {
+                teamWinner = entry.getKey().getTeam();
+                higherPoint = entry.getValue().getPointNoTrump();
+            }
+        }
+
+        return teamWinner;
     }
 
     private void nextPlayer() {
         this.playerTurn++;
         if (this.playerTurn == 4) {
             this.playerTurn = 0;
-            this.calculateAllPoints();
+            this.calculateFoldWinner();
         }
         System.out.println(this.playerTurn);
         this.displayTurnMessage();
