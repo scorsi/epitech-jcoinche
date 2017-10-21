@@ -12,9 +12,11 @@ public class TurnState extends AState {
 
     private HashMap<Player, Card> table;
     private int playerTurn;
+    private Contract contract;
 
-    public TurnState(Lobby lobby) {
+    public TurnState(Lobby lobby, Contract contract) {
         super("Turn", lobby);
+        this.contract = contract;
     }
 
     @Override

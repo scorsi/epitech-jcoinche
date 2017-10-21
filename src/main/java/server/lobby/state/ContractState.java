@@ -2,13 +2,14 @@ package server.lobby.state;
 
 import io.netty.channel.Channel;
 import proto.Command;
+import server.game.Contract;
 import server.game.Player;
 import server.lobby.Lobby;
 
 public class ContractState extends AState {
 
     private int playerTurn;
-    private boolean isValid;
+    private Contract contract;
 
     public ContractState(Lobby lobby) {
         super("Contract", lobby);
@@ -18,7 +19,6 @@ public class ContractState extends AState {
     public AState initialize() {
         this.getLobby().broadcast("You need to put contracts.", null);
         this.playerTurn = 0;
-        this.isValid = false;
         this.displayTurnMessage();
         return this;
     }
@@ -30,8 +30,8 @@ public class ContractState extends AState {
 
     @Override
     public AState getNextState() {
-        if (this.isValid) {
-            return new TurnState(this.getLobby());
+        if (this.contract != null) {
+            return new TurnState(this.getLobby(), this.contract);
         } else {
             this.getLobby().broadcast("Anyone put a contract. Replay the round.", null);
             return new DrawState(this.getLobby());
@@ -48,8 +48,7 @@ public class ContractState extends AState {
                 } else {
                     this.getLobby().broadcast(player.getName() + " put a contract: " + cmd.getContract().getType()
                             + " " + cmd.getContract().getValue() + ".", null);
-
-                    this.isValid = true;
+                    this.contract = new Contract(player.getTeam(), cmd.getContract().getType(), cmd.getContract().getValue());
                 }
 
                 this.playerTurn++;
