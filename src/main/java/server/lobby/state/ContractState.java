@@ -53,9 +53,9 @@ public class ContractState extends AState {
 
     private void handleShowContract(Channel channel, Command.LobbyCmd cmd) {
         if (this.contract != null)
-            this.getLobby().sendMsg("[SERVER] The contract is " + this.contract, channel);
+            this.getLobby().sendMsg("[SERVER] The contract is " + this.contract.getType() + " " + this.contract.getValue(), channel);
         else
-            this.getLobby().sendMsg("[SERVER] There are no contract", channel);
+            this.getLobby().sendMsg("[SERVER] There is no contract", channel);
 
     }
 

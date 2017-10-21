@@ -49,7 +49,7 @@ public class Contract implements ICommand {
         int value = 0;
         if (type != Command.Contract.Type.PASS) {
             value = (Integer.parseInt(args[2]) / 10) * 10;
-            if (value < 80 || value > 160) {
+            if (value < 80 || value > 650) {
                 throw new Exception();
             }
         }

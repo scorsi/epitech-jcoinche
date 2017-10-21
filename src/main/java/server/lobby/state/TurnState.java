@@ -53,7 +53,7 @@ public class TurnState extends AState {
 
     private void handleShowContract(Channel channel, Command.LobbyCmd cmd) {
 
-        this.getLobby().sendMsg("[SERVER] The contract is " + this.contract, channel);
+        this.getLobby().sendMsg("[SERVER] The contract is " + this.contract.getType() + " " + this.contract.getValue(), channel);
     }
 
     private void handleShowTable(Channel channel, Command.LobbyCmd cmd) {
