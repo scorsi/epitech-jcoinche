@@ -4,6 +4,7 @@ public enum Commands {
 
     Username(new String[]{"/username", "/name", "/u"}, Username.class),
     Team(new String[]{"/team", "/t"}, Team.class),
+    Contract(new String[]{"/contract"}, Contract.class),
     Create(new String[]{"/create", "/c"}, Create.class),
     Join(new String[]{"/join", "/j"}, Join.class),
     ListPlayers(new String[]{"/list-players"}, ListPlayers.class),
