@@ -114,6 +114,11 @@ public class TurnState extends AState {
         }
     }
 
+    private void displayTeamPoints() {
+        this.getLobby().broadcast("Team points:\n-> Red: " + this.points.get(Team.Red) +
+                "\n-> Blue: " + this.points.get(Team.Blue), null);
+    }
+
     private void displayTurnMessage() {
         Player player = (Player) this.getLobby().getPlayers().toArray()[this.playerTurn];
         this.getLobby().broadcast("This is the turn of " + player.getName() + ".", null);
@@ -142,7 +147,7 @@ public class TurnState extends AState {
         this.points.put(teamWinner, this.points.get(teamWinner) + foldPoint);
 
         this.table.clear();
-        System.out.println("Red: " + this.points.get(Team.Red) + ", Blue: " + this.points.get(Team.Blue) + ".");
+        this.displayTeamPoints();
     }
 
     private int calculateFoldPoints() {
