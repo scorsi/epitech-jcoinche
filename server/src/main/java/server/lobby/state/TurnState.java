@@ -332,7 +332,6 @@ public class TurnState extends AState {
             this.playerTurn = 0;
             this.calculateFoldWinner();
         }
-        System.out.println(this.playerTurn);
         this.displayTurnMessage();
     }
 
