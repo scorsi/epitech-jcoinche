@@ -11,7 +11,8 @@ public enum LobbyCommands {
     Play(CmdType.PLAY_CARD, PlayCard.class),
     ShowTable(CmdType.SHOW_TABLE, ShowTable.class),
     Contract(CmdType.CONTRACT, Contract.class),
-    ShowContract(CmdType.SHOW_CONTRACT, ShowContract.class);
+    ShowContract(CmdType.SHOW_CONTRACT, ShowContract.class),
+    ShowPoints(CmdType.SHOW_POINTS, ShowPoints.class);
 
 
     private CmdType cmdType;
