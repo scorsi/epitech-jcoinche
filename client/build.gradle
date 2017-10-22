@@ -45,7 +45,7 @@ protobuf {
         artifact = 'com.google.protobuf:protoc:3.0.0-alpha-3'
     }
 
-    generateProtoTasks.generatedFilesBaseDir = 'src'
+    generateProtoTasks.generatedFilesBaseDir = 'client/rc'
 
     generateProtoTasks {
         all().each { task ->
@@ -56,7 +56,7 @@ protobuf {
 }
 
 jar {
-    baseName = "jcoinche_client"
+    baseName = "jcoinche-client"
     version = "0.0.1"
     manifest {
         attributes (
@@ -64,4 +64,8 @@ jar {
                 "Main-Class" : "client.Client"
         )
     }
+    from configurations.compile.collect { it.isDirectory() ? it : zipTree(it) }
+    destinationDir = file("$rootDir/target")
 }
+
+task ("package", dependsOn: jar, type: Jar) {}
