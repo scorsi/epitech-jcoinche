@@ -62,6 +62,8 @@ public class TurnState extends AState {
             this.handleShowContract(channel, cmd);
         } else if (cmd.getCmdType().equals(Command.LobbyCmd.CmdType.SHOW_POINTS)) {
             this.handleShowPoints(channel, cmd);
+        } else if (cmd.getCmdType().equals(Command.LobbyCmd.CmdType.SHOW_ROUND_POINTS)) {
+            this.handleShowRoundPoints(channel, cmd);
         }
     }
 
@@ -125,8 +127,12 @@ public class TurnState extends AState {
     }
 
     private void handleShowPoints(Channel channel, Command.LobbyCmd cmd) {
-        System.out.println("toto");
-        this.getLobby().sendMsg("[SERVER] Team points:\n-> Red: " + this.points.get(Team.Red) +
+        this.getLobby().sendMsg("[SERVER] Team points:\n-> Red: " + this.getLobby().getPoints(Team.Red) +
+                "\n-> Blue: " + this.getLobby().getPoints(Team.Blue), channel);
+    }
+
+    private void handleShowRoundPoints(Channel channel, Command.LobbyCmd cmd) {
+        this.getLobby().sendMsg("[SERVER] Team round points:\n-> Red: " + this.points.get(Team.Red) +
                 "\n-> Blue: " + this.points.get(Team.Blue), channel);
     }
 

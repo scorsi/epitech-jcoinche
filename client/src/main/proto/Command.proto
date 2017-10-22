@@ -55,6 +55,7 @@ message LobbyCmd {
         CONTRACT = 7;
         SHOW_CONTRACT = 8;
         SHOW_POINTS = 9;
+        SHOW_ROUND_POINTS = 10;
     }
 
     required CmdType cmdType = 1;
