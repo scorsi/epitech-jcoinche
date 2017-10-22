@@ -20,7 +20,7 @@ public class DrawState extends AState {
 
     @Override
     public AState initialize() {
-        this.getLobby().broadcast("All teams are complete. Distribution of cards.", null);
+        this.getLobby().broadcast("Distribution of cards.", null);
         List<Deck> decks = new DeckGenerator().generateAllDecks();
         for (Player player : this.getLobby().getPlayers()) {
             player.setDeck(decks.get(0));
