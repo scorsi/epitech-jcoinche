@@ -13,7 +13,9 @@ public enum Commands {
     ShowCards(new String[]{"/show-cards", "/cards"}, ShowCards.class),
     ShowTable(new String[]{"/show-table", "/table"}, ShowTable.class),
     PlayCard(new String[]{"/play", "/p"}, PlayCard.class),
-    ShowContract(new String[]{"/show-contract"}, ShowContract.class);
+    ShowContract(new String[]{"/show-contract"}, ShowContract.class),
+    ShowPoints(new String[]{"/show-points", "/points"}, ShowPoints.class),
+    ShowRoundPoints(new String[]{"/show-roundpoints", "/show-round-points", "/round-points"}, ShowRoundPoints.class);
 
     private String[] aliases;
     private Class command;

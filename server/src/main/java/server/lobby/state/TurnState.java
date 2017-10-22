@@ -92,6 +92,10 @@ public class TurnState extends AState {
             this.handleShowTable(channel, cmd);
         } else if (cmd.getCmdType().equals(Command.LobbyCmd.CmdType.SHOW_CONTRACT)) {
             this.handleShowContract(channel, cmd);
+        } else if (cmd.getCmdType().equals(Command.LobbyCmd.CmdType.SHOW_POINTS)) {
+            this.handleShowPoints(channel, cmd);
+        } else if (cmd.getCmdType().equals(Command.LobbyCmd.CmdType.SHOW_ROUND_POINTS)) {
+            this.handleShowRoundPoints(channel, cmd);
         }
     }
 
@@ -152,6 +156,16 @@ public class TurnState extends AState {
         } else {
             this.getLobby().sendMsg("[SERVER] This is not your turn.", channel);
         }
+    }
+
+    private void handleShowPoints(Channel channel, Command.LobbyCmd cmd) {
+        this.getLobby().sendMsg("[SERVER] Team points:\n-> Red: " + this.getLobby().getPoints(Team.Red) +
+                "\n-> Blue: " + this.getLobby().getPoints(Team.Blue), channel);
+    }
+
+    private void handleShowRoundPoints(Channel channel, Command.LobbyCmd cmd) {
+        this.getLobby().sendMsg("[SERVER] Team round points:\n-> Red: " + this.points.get(Team.Red) +
+                "\n-> Blue: " + this.points.get(Team.Blue), channel);
     }
 
     private void displayTeamPoints() {
