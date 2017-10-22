@@ -12,6 +12,7 @@ public class TurnState extends AState {
 
     private HashMap<Player, Card> table;
     private int playerTurn;
+    private int firstPlayer;
     private Contract contract;
     private HashMap<Team, Integer> points;
 
@@ -26,7 +27,10 @@ public class TurnState extends AState {
         this.points.put(Team.Red, 0);
         this.points.put(Team.Blue, 0);
         this.table = new HashMap<>();
+
+        this.firstPlayer = 0;
         this.playerTurn = 0;
+
         this.getLobby().broadcast("The game is ready.", null);
         this.displayTurnMessage();
         return this;
@@ -44,9 +48,44 @@ public class TurnState extends AState {
         return check;
     }
 
+    private Team getOtherTeam(Team team) {
+        if (team == Team.Blue) {
+            return Team.Red;
+        } else {
+            return Team.Blue;
+        }
+    }
+
     @Override
     public AState getNextState() {
-        this.getLobby().broadcast("New turn.", null);
+        HashMap<Team, Integer> allPoints = this.getLobby().getPoints();
+
+        if (this.points.get(this.contract.getTeam()) > this.contract.getValue()) {
+            this.getLobby().broadcast("The team " + this.contract.getTeam().getName() + " respected his contract." +
+                    " They win " + this.contract.getValue() + " points."
+                    , null);
+
+            Team winnerTeam = this.contract.getTeam();
+            Team loserTeam = getOtherTeam(this.contract.getTeam());
+
+            allPoints.put(winnerTeam, allPoints.get(winnerTeam) + this.contract.getValue() + this.points.get(winnerTeam));
+            allPoints.put(loserTeam, allPoints.get(loserTeam) + this.points.get(loserTeam));
+        } else {
+            this.getLobby().broadcast("The team " + this.contract.getTeam().getName() + " missed his contract." +
+                    " They lose theirs points and the other team get 162 + " + this.contract.getValue() + " points."
+                    , null);
+
+            Team winnerTeam = getOtherTeam(this.contract.getTeam());
+
+            allPoints.put(winnerTeam, allPoints.get(winnerTeam) + 162 + this.contract.getValue());
+        }
+
+        this.getLobby().setPoints(allPoints);
+
+        if (this.getLobby().getPoints().get(Team.Red) >= 1000 || this.getLobby().getPoints().get(Team.Blue) >= 1000)
+            return new WinningState(this.getLobby());
+
+        this.getLobby().broadcast("New round.", null);
         return new DrawState(this.getLobby());
     }
 
@@ -60,6 +99,10 @@ public class TurnState extends AState {
             this.handleShowTable(channel, cmd);
         } else if (cmd.getCmdType().equals(Command.LobbyCmd.CmdType.SHOW_CONTRACT)) {
             this.handleShowContract(channel, cmd);
+        } else if (cmd.getCmdType().equals(Command.LobbyCmd.CmdType.SHOW_POINTS)) {
+            this.handleShowPoints(channel, cmd);
+        } else if (cmd.getCmdType().equals(Command.LobbyCmd.CmdType.SHOW_ROUND_POINTS)) {
+            this.handleShowRoundPoints(channel, cmd);
         }
     }
 
@@ -122,6 +165,16 @@ public class TurnState extends AState {
         }
     }
 
+    private void handleShowPoints(Channel channel, Command.LobbyCmd cmd) {
+        this.getLobby().sendMsg("[SERVER] Team points:\n-> Red: " + this.getLobby().getPoints().get(Team.Red) +
+                "\n-> Blue: " + this.getLobby().getPoints().get(Team.Blue), channel);
+    }
+
+    private void handleShowRoundPoints(Channel channel, Command.LobbyCmd cmd) {
+        this.getLobby().sendMsg("[SERVER] Team round points:\n-> Red: " + this.points.get(Team.Red) +
+                "\n-> Blue: " + this.points.get(Team.Blue), channel);
+    }
+
     private void displayTeamPoints() {
         this.getLobby().broadcast("Team points:\n-> Red: " + this.points.get(Team.Red) +
                 "\n-> Blue: " + this.points.get(Team.Blue), null);
@@ -135,24 +188,33 @@ public class TurnState extends AState {
     }
 
     private void calculateFoldWinner() {
-        Team teamWinner;
+        Player winnerPlayer;
         switch (this.contract.getType()) {
             case SPADE:
             case CLUB:
             case HEART:
             case DIAMOND:
-                teamWinner = this.calculateFoldWinnerWithColorTrump();
+                winnerPlayer = this.calculateFoldWinnerWithColorTrump();
                 break;
             case ALL_TRUMP:
-                teamWinner = this.calculateFoldWinnerWithAllTrump();
+                winnerPlayer = this.calculateFoldWinnerWithAllTrump();
                 break;
             case NO_TRUMP:
             default:
-                teamWinner = this.calculateFoldWinnerWithNoTrump();
+                winnerPlayer = this.calculateFoldWinnerWithNoTrump();
                 break;
         }
         int foldPoint = this.calculateFoldPoints();
-        this.points.put(teamWinner, this.points.get(teamWinner) + foldPoint);
+        this.points.put(winnerPlayer.getTeam(), this.points.get(winnerPlayer.getTeam()) + foldPoint);
+
+        this.firstPlayer = 0;
+        for (Player player : this.getLobby().getPlayers()) {
+            if (player.equals(winnerPlayer)) {
+                break;
+            }
+            ++this.firstPlayer;
+        }
+        this.playerTurn = this.firstPlayer;
 
         this.table.clear();
         this.displayTeamPoints();
@@ -202,7 +264,7 @@ public class TurnState extends AState {
         return foldPoints;
     }
 
-    private Team calculateFoldWinnerWithColorTrump() {
+    private Player calculateFoldWinnerWithColorTrump() {
         CardColor color;
         switch (this.contract.getType()) {
             case DIAMOND:
@@ -221,12 +283,12 @@ public class TurnState extends AState {
         }
 
         int higherPoint = -1;
-        Team teamWinner = null;
+        Player winnerPlayer = null;
 
         for (Map.Entry<Player, Card> entry : this.table.entrySet()) {
             if (color.getName().equals(entry.getValue().getColorName()) &&
                     entry.getValue().getPointOneTrump() > higherPoint) {
-                teamWinner = entry.getKey().getTeam();
+                winnerPlayer = entry.getKey();
                 higherPoint = entry.getValue().getPointOneTrump();
             }
         }
@@ -237,56 +299,57 @@ public class TurnState extends AState {
             for (Map.Entry<Player, Card> entry : this.table.entrySet()) {
                 if (color.getName().equals(entry.getValue().getColorName()) &&
                         entry.getValue().getPointIsNotTrump() > higherPoint) {
-                    teamWinner = entry.getKey().getTeam();
+                    winnerPlayer = entry.getKey();
                     higherPoint = entry.getValue().getPointIsNotTrump();
                 }
             }
         }
 
-        return teamWinner;
+        return winnerPlayer;
     }
 
-    private Team calculateFoldWinnerWithAllTrump() {
+    private Player calculateFoldWinnerWithAllTrump() {
         CardColor color = ((Card) (this.table.values().toArray()[0])).getColor();
 
         int higherPoint = -1;
-        Team teamWinner = null;
+        Player winnerPlayer = null;
 
         for (Map.Entry<Player, Card> entry : this.table.entrySet()) {
             if (color.getName().equals(entry.getValue().getColorName()) &&
                     entry.getValue().getPointAllTrump() > higherPoint) {
-                teamWinner = entry.getKey().getTeam();
+                winnerPlayer = entry.getKey();
                 higherPoint = entry.getValue().getPointAllTrump();
             }
         }
 
-        return teamWinner;
+        return winnerPlayer;
     }
 
-    private Team calculateFoldWinnerWithNoTrump() {
+    private Player calculateFoldWinnerWithNoTrump() {
         CardColor color = ((Card) (this.table.values().toArray()[0])).getColor();
 
         int higherPoint = -1;
-        Team teamWinner = null;
+        Player winnerPlayer = null;
 
         for (Map.Entry<Player, Card> entry : this.table.entrySet()) {
             if (color.getName().equals(entry.getValue().getColorName()) &&
                     entry.getValue().getPointNoTrump() > higherPoint) {
-                teamWinner = entry.getKey().getTeam();
+                winnerPlayer = entry.getKey();
                 higherPoint = entry.getValue().getPointNoTrump();
             }
         }
 
-        return teamWinner;
+        return winnerPlayer;
     }
 
     private void nextPlayer() {
         this.playerTurn++;
         if (this.playerTurn == 4) {
             this.playerTurn = 0;
+        }
+        if (this.playerTurn == this.firstPlayer) {
             this.calculateFoldWinner();
         }
-        System.out.println(this.playerTurn);
         this.displayTurnMessage();
     }
 

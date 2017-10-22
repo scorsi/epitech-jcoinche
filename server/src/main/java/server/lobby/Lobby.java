@@ -5,19 +5,19 @@ import proto.Message.MessageChat;
 
 import io.netty.channel.Channel;
 import server.game.Player;
+import server.game.Team;
 import server.lobby.state.AState;
 import server.lobby.state.WaitingState;
 
 import java.sql.Timestamp;
-import java.util.HashMap;
-import java.util.Collection;
-import java.util.Map;
+import java.util.*;
 
 public class Lobby {
 
     private LobbyManager lobbyManager;
 
     private HashMap<Channel, Player> players;
+    private HashMap<Team, Integer> points;
     private boolean isShuttingDown = false;
     private AState actualState = null;
     private String name;
@@ -26,6 +26,7 @@ public class Lobby {
         this.lobbyManager = lobbyManager;
         this.name = name;
         this.players = new HashMap<>();
+        this.points = new HashMap<>();
         this.actualState = new WaitingState(this).initialize();
     }
 
@@ -58,6 +59,11 @@ public class Lobby {
             this.getLobbyManager().getLobbies().remove(this);
         } else {
             this.broadcast(playerToRemove.getName() + " left the game.", null);
+        }
+
+        if (!this.actualState.getName().contentEquals("Waiting")) {
+            this.broadcast("The game is over, waiting for players.", null);
+            this.actualState = new WaitingState(this);
         }
     }
 
@@ -115,6 +121,21 @@ public class Lobby {
         return this.players.values();
     }
 
+    public void setPlayers(List<Player> players) {
+        HashMap<Channel, Player> newMap = new LinkedHashMap<>();
+
+        for (Player player : players) {
+            for (Map.Entry<Channel, Player> entry : this.players.entrySet()) {
+                if (entry.getValue().getName().contentEquals(player.getName())) {
+                    newMap.put(entry.getKey(), entry.getValue());
+                    break;
+                }
+            }
+        }
+
+        this.players = newMap;
+    }
+
     public Player getPlayer(Channel channel) {
         return this.players.get(channel);
     }
@@ -129,5 +150,13 @@ public class Lobby {
 
     public String getName() {
         return name;
+    }
+
+    public HashMap<Team, Integer> getPoints() {
+        return points;
+    }
+
+    public void setPoints(HashMap<Team, Integer> points) {
+        this.points = points;
     }
 }

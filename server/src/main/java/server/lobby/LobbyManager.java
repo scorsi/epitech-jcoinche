@@ -55,13 +55,12 @@ public class LobbyManager {
         if (this.getWaitingPlayers().containsKey(channel))
             this.getWaitingPlayers().remove(channel);
         else {
-            Lobby lobbyToShutdown = this.getLobbyByChannel(channel);
+            Lobby lobby = this.getLobbyByChannel(channel);
 
-            if (lobbyToShutdown == null)
+            if (lobby == null)
                 return;
 
-            lobbyToShutdown.shutdown();
-            this.getLobbies().remove(lobbyToShutdown);
+            lobby.removePlayer(channel);
         }
     }
 
