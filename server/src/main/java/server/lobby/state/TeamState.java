@@ -32,6 +32,7 @@ public class TeamState extends AState {
 
     @Override
     public AState getNextState() {
+        this.getLobby().broadcast("All teams are complete.", null);
         return new DrawState(this.getLobby());
     }
 

@@ -27,19 +27,27 @@ public class TurnState extends AState {
         this.points.put(Team.Blue, 0);
         this.table = new HashMap<>();
         this.playerTurn = 0;
-        this.getLobby().broadcast("The game is ready. Let's play.", null);
+        this.getLobby().broadcast("The game is ready.", null);
         this.displayTurnMessage();
         return this;
     }
 
     @Override
     public boolean isFinished() {
-        return false;
+        boolean check = true;
+
+        for (Player player : this.getLobby().getPlayers()) {
+            if (player.getDeck().getCards().size() != 0) {
+                check = false;
+            }
+        }
+        return check;
     }
 
     @Override
     public AState getNextState() {
-        return null;
+        this.getLobby().broadcast("New turn.", null);
+        return new DrawState(this.getLobby());
     }
 
     @Override
@@ -114,6 +122,11 @@ public class TurnState extends AState {
         }
     }
 
+    private void displayTeamPoints() {
+        this.getLobby().broadcast("Team points:\n-> Red: " + this.points.get(Team.Red) +
+                "\n-> Blue: " + this.points.get(Team.Blue), null);
+    }
+
     private void displayTurnMessage() {
         Player player = (Player) this.getLobby().getPlayers().toArray()[this.playerTurn];
         this.getLobby().broadcast("This is the turn of " + player.getName() + ".", null);
@@ -142,7 +155,7 @@ public class TurnState extends AState {
         this.points.put(teamWinner, this.points.get(teamWinner) + foldPoint);
 
         this.table.clear();
-        System.out.println("Red: " + this.points.get(Team.Red) + ", Blue: " + this.points.get(Team.Blue) + ".");
+        this.displayTeamPoints();
     }
 
     private int calculateFoldPoints() {
