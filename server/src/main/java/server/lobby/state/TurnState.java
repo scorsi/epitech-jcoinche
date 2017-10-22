@@ -159,8 +159,8 @@ public class TurnState extends AState {
     }
 
     private void handleShowPoints(Channel channel, Command.LobbyCmd cmd) {
-        this.getLobby().sendMsg("[SERVER] Team points:\n-> Red: " + this.getLobby().getPoints(Team.Red) +
-                "\n-> Blue: " + this.getLobby().getPoints(Team.Blue), channel);
+        this.getLobby().sendMsg("[SERVER] Team points:\n-> Red: " + this.getLobby().getPoints().get(Team.Red) +
+                "\n-> Blue: " + this.getLobby().getPoints().get(Team.Blue), channel);
     }
 
     private void handleShowRoundPoints(Channel channel, Command.LobbyCmd cmd) {
