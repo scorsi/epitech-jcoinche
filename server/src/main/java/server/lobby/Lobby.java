@@ -10,9 +10,7 @@ import server.lobby.state.AState;
 import server.lobby.state.WaitingState;
 
 import java.sql.Timestamp;
-import java.util.HashMap;
-import java.util.Collection;
-import java.util.Map;
+import java.util.*;
 
 public class Lobby {
 
@@ -116,6 +114,21 @@ public class Lobby {
 
     public Collection<Player> getPlayers() {
         return this.players.values();
+    }
+
+    public void setPlayers(List<Player> players) {
+        HashMap<Channel, Player> newMap = new LinkedHashMap<>();
+
+        for (Player player : players) {
+            for (Map.Entry<Channel, Player> entry : this.players.entrySet()) {
+                if (entry.getValue().getName().contentEquals(player.getName())) {
+                    newMap.put(entry.getKey(), entry.getValue());
+                    break;
+                }
+            }
+        }
+
+        this.players = newMap;
     }
 
     public Player getPlayer(Channel channel) {

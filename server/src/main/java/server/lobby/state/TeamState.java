@@ -6,6 +6,11 @@ import server.game.Player;
 import server.lobby.Lobby;
 import server.game.Team;
 
+import javax.swing.*;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
+
 public class TeamState extends AState {
 
     public TeamState(Lobby lobby) {
@@ -35,6 +40,22 @@ public class TeamState extends AState {
 
     @Override
     public AState getNextState() {
+        List<Player> players = new ArrayList<>();
+        Player lastAddedPlayer = null;
+
+        List<Player> lobbyPlayers = new ArrayList<>(this.getLobby().getPlayers());
+
+        while (lobbyPlayers.size() != 0) {
+            Player playerToAdd = (Player) lobbyPlayers.toArray()[(int) ((Math.random() * 100) % lobbyPlayers.size())];
+            if (players.isEmpty() || !playerToAdd.getTeam().getName().contentEquals(lastAddedPlayer.getTeam().getName())) {
+                players.add(playerToAdd);
+                lastAddedPlayer = playerToAdd;
+                lobbyPlayers.remove(playerToAdd);
+            }
+        }
+        this.getLobby().setPlayers(players);
+
+
         this.getLobby().broadcast("All teams are complete.", null);
         return new DrawState(this.getLobby());
     }
