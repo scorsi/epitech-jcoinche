@@ -30,7 +30,7 @@ public class Client {
             System.out.println(e.toString());
         }
         finally {
-            if (client.serverChannel.isOpen())
+            if (client.serverChannel != null && client.serverChannel.isOpen())
                 client.serverChannel.close();
         }
     }
