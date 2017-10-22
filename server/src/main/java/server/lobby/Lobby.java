@@ -60,6 +60,11 @@ public class Lobby {
         } else {
             this.broadcast(playerToRemove.getName() + " left the game.", null);
         }
+
+        if (!this.actualState.getName().contentEquals("Waiting")) {
+            this.broadcast("The game is over, waiting for players.", null);
+            this.actualState = new WaitingState(this);
+        }
     }
 
     public void shutdown() {
