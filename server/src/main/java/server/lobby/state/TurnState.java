@@ -27,19 +27,27 @@ public class TurnState extends AState {
         this.points.put(Team.Blue, 0);
         this.table = new HashMap<>();
         this.playerTurn = 0;
-        this.getLobby().broadcast("The game is ready. Let's play.", null);
+        this.getLobby().broadcast("The game is ready.", null);
         this.displayTurnMessage();
         return this;
     }
 
     @Override
     public boolean isFinished() {
-        return false;
+        boolean check = true;
+
+        for (Player player : this.getLobby().getPlayers()) {
+            if (player.getDeck().getCards().size() != 0) {
+                check = false;
+            }
+        }
+        return check;
     }
 
     @Override
     public AState getNextState() {
-        return null;
+        this.getLobby().broadcast("New turn.", null);
+        return new DrawState(this.getLobby());
     }
 
     @Override
