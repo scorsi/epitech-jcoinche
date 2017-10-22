@@ -111,5 +111,7 @@ gradle-app.setting
 
 
 server/src/main/java/proto/
-client/src/main/java/proto/
+server/out/
 
+client/src/main/java/proto/
+client/out/
