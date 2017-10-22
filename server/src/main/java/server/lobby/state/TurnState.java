@@ -44,8 +44,40 @@ public class TurnState extends AState {
         return check;
     }
 
+    private Team getOtherTeam(Team team) {
+        if (team == Team.Blue) {
+            return Team.Red;
+        } else {
+            return Team.Blue;
+        }
+    }
+
     @Override
     public AState getNextState() {
+        HashMap<Team, Integer> allPoints = this.getLobby().getPoints();
+
+        if (this.points.get(this.contract.getTeam()) > this.contract.getValue()) {
+            this.getLobby().broadcast("The team " + this.contract.getTeam().getName() + " respected his contract." +
+                    " They win " + this.contract.getValue() + " points."
+                    , null);
+
+            Team winnerTeam = this.contract.getTeam();
+            Team loserTeam = getOtherTeam(this.contract.getTeam());
+
+            allPoints.put(winnerTeam, allPoints.get(winnerTeam) + this.contract.getValue() + this.points.get(winnerTeam));
+            allPoints.put(loserTeam, allPoints.get(loserTeam) + this.points.get(loserTeam));
+        } else {
+            this.getLobby().broadcast("The team " + this.contract.getTeam().getName() + " missed his contract." +
+                    " They lose theirs points and the other team get 162 + " + this.contract.getValue() + " points."
+                    , null);
+
+            Team winnerTeam = getOtherTeam(this.contract.getTeam());
+
+            allPoints.put(winnerTeam, allPoints.get(winnerTeam) + 162 + this.contract.getValue());
+        }
+
+        this.getLobby().setPoints(allPoints);
+
         this.getLobby().broadcast("New turn.", null);
         return new DrawState(this.getLobby());
     }

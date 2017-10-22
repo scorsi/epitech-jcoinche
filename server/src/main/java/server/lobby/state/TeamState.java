@@ -18,6 +18,9 @@ public class TeamState extends AState {
         for (Player player : this.getLobby().getPlayers()) {
             player.setTeam(Team.Undifined);
         }
+
+        this.getLobby().getPoints().put(Team.Red, 0);
+        this.getLobby().getPoints().put(Team.Blue, 0);
         return this;
     }
 

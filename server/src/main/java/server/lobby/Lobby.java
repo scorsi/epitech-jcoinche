@@ -5,6 +5,7 @@ import proto.Message.MessageChat;
 
 import io.netty.channel.Channel;
 import server.game.Player;
+import server.game.Team;
 import server.lobby.state.AState;
 import server.lobby.state.WaitingState;
 
@@ -18,6 +19,7 @@ public class Lobby {
     private LobbyManager lobbyManager;
 
     private HashMap<Channel, Player> players;
+    private HashMap<Team, Integer> points;
     private boolean isShuttingDown = false;
     private AState actualState = null;
     private String name;
@@ -26,6 +28,7 @@ public class Lobby {
         this.lobbyManager = lobbyManager;
         this.name = name;
         this.players = new HashMap<>();
+        this.points = new HashMap<>();
         this.actualState = new WaitingState(this).initialize();
     }
 
@@ -129,5 +132,13 @@ public class Lobby {
 
     public String getName() {
         return name;
+    }
+
+    public HashMap<Team, Integer> getPoints() {
+        return points;
+    }
+
+    public void setPoints(HashMap<Team, Integer> points) {
+        this.points = points;
     }
 }
