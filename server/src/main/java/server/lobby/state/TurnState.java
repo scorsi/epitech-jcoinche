@@ -78,7 +78,10 @@ public class TurnState extends AState {
 
         this.getLobby().setPoints(allPoints);
 
-        this.getLobby().broadcast("New turn.", null);
+        if (this.getLobby().getPoints().get(Team.Red) >= 1000 || this.getLobby().getPoints().get(Team.Blue) >= 1000)
+            return new WinningState(this.getLobby());
+
+        this.getLobby().broadcast("New round.", null);
         return new DrawState(this.getLobby());
     }
 
