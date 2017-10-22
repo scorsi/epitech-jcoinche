@@ -64,6 +64,7 @@ public class TeamState extends AState {
         if (team.toUpperCase().equals("RED")) {
             if (!this.isTeamFull(player, Team.Red)) {
                 this.getLobby().sendMsg("[SERVER] You changed your team to Red.", channel);
+                this.getLobby().broadcast(player.getName() + " joined team Red", null);
                 player.setTeam(Team.Red);
             } else {
                 this.getLobby().sendMsg("[SERVER] This team is full, choose the other.", channel);
@@ -71,6 +72,7 @@ public class TeamState extends AState {
         } else if (team.toUpperCase().equals("BLUE")) {
             if (!this.isTeamFull(player, Team.Blue)) {
                 this.getLobby().sendMsg("[SERVER] You changed your team to Blue.", channel);
+                this.getLobby().broadcast(player.getName() + " joined team Blue", null);
                 player.setTeam(Team.Blue);
             } else {
                 this.getLobby().sendMsg("[SERVER] This team is full, choose the other.", channel);
